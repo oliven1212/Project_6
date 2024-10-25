@@ -1,19 +1,21 @@
 @import './base.css';
-
+@import url('https://fonts.cdnfonts.com/css/avenir');
 #app {
 width: 100%;
 display: block;
 }
-
+h1,h2,h3,p,a{
+    font-family: 'Avenir', sans-serif;
+}
 h1{
-    font-size: 40px;
+    font-size: 50px;
 }
 h2{
+    font-size: 40px;
+}
+h3,a{
     font-size: 30px;
 }
-h3{
-    font-size: 20px;
-}
 p{
-    font-size: 20px;
+    font-size: 25px;
 }

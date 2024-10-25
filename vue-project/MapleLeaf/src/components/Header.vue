@@ -28,11 +28,11 @@
 </template>
 
 <style scoped>
-@import '../assets/main.css';
 
 header{
     background-color: #EEEEEE;
     height: 100px;
+    overflow: hidden;
 }
 #headerItems {
     display: flex;
@@ -42,10 +42,11 @@ header{
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 100px;
+    width: 150px;
 }
 #headerItems div a{
-    text-align: center
+    text-align: center;
+    text-decoration: none;
 }
 #headerItems div img{
     display: block;
