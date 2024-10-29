@@ -26,7 +26,7 @@
   width: 63%;
   position: relative;
   z-index: 1;
-  top: 0px;
+  top: -6%;
   left: 37%;
   margin-top: 6%;
   margin-bottom: 8%;
@@ -38,6 +38,7 @@
   z-index: 2;
   top: 0px;
   left: 0px;
+  height: 100%;
   }
   #front div{
     display: flex;
@@ -59,7 +60,7 @@
     margin-top: 30px;
     margin-left: 0px;
     border-radius: 20px;
-    background-color: greenyellow;
+    background-color: #FFAC00;
     text-decoration: none;
   }
 </style>
