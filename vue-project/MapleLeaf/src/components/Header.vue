@@ -11,7 +11,7 @@
                 <img src="../assets/icons/homeIcon.png" alt="">
                 <h3>Home</h3>
             </a>
-            <a href="./">
+            <a href="./about">
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Piller</h3>
             </a>
