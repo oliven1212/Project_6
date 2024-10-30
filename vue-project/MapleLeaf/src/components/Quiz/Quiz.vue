@@ -30,7 +30,7 @@ const firebaseConfig = secret;
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //initialize the Vertex AI service
-const vertexAI = getVertexAI(firebaseApp);
+const vertexAI = getVertexAI(app);
 
 const model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
 
