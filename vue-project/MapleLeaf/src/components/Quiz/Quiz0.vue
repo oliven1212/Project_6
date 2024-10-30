@@ -52,6 +52,7 @@
 }
 label{
     margin-left: 5px;
+    width: 80%;
 }
 #navigation{
     display: flex;
