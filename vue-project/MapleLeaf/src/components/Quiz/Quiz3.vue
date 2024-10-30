@@ -8,6 +8,10 @@
             <input type=" text" class="inputText"/>
         </div>
     </div>
+    <div id="navigation">
+            <button>Forrige</button>
+            <button>Næste</button>
+        </div>
 </template>
 
 <style scoped>

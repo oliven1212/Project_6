@@ -18,6 +18,10 @@
         <label for="choice-3">Choice 3</label>
       </div>
     </div>
+    <div id="navigation">
+            <button>Forrige</button>
+            <button>Næste</button>
+        </div>
   </div>
 
 </template>
