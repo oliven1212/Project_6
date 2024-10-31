@@ -1,4 +1,54 @@
 <script setup>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {getVertexAI,getGenerativeModel} from "firebase/vertexai";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+//gets the firebaseconfigs
+let secret;
+await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json",{
+    method: "GET"})
+        .then((response) => {
+            return response.json()
+        })
+        .then((result) => {
+            secret = result[Object.keys(result)];
+            
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+
+
+
+// Your web app's Firebase configuration
+const firebaseConfig = secret;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+//initialize the Vertex AI service
+const vertexAI = getVertexAI(app);
+
+const model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
+
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth(app);
+//wrap en an async function som can use await
+async function run(){ 
+    //provide a prompt that contains text
+    const prompt = "write a story about a magic backpack in 5 lines."
+    //to generate text output, call generate content with the text input
+    const result = await model.generateContent(prompt);
+    const response = result.response
+    const text = response.text();
+    console.log(text);
+    
+}
+run();
+
 </script>
 
 <template>
