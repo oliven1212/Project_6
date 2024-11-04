@@ -3,7 +3,7 @@
 
 <template>
     <div class="QuizBox" >
-        <h1>Hello galaxy</h1>
+        <h1>Hvad er dit Navn?</h1>
         <div id="options">
             <input type=" text" class="inputText"/>
         </div>

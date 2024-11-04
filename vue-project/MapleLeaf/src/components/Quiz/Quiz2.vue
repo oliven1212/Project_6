@@ -3,15 +3,15 @@
 
 <template>
     <div class="QuizBox" >
-      <h1>Hello Universe</h1>
+      <h1>Hvilke symptomer oplever du?</h1>
       <div id="options">
         <div class="option">
           <input type="radio" name="choice" value="choice-1" id="choice-1" checked>
-          <label for="choice-1">Choice 1</label>
+          <label for="choice-1">Hårtab</label>
         </div>
         <div class="option">
           <input type="radio" name="choice" value="choice-2" id="choice-2">
-          <label for="choice-2">Choice 2</label>
+          <label for="choice-2">Søvnmangel</label>
         </div>
       </div>
       <div id="navigation">

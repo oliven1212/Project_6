@@ -9,7 +9,6 @@
 </script>
 <template>
   <NavBar />
-  <Quiz0 />
   <br><hr><br>
   <Quiz1 />
   <br><hr><br>
