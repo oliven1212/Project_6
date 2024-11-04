@@ -1,4 +1,19 @@
 <script setup>
+let currentQuestion = 0;
+
+update = () => {
+    let data = fecth ("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json");
+}
+
+
+previousQuestion = ()=>{
+currentQuestion-=1;
+
+}
+nextQuestion = ()=>{
+currentQuestion+=1;
+
+}
 </script>
 
 <template>
@@ -19,9 +34,9 @@
       </div>
     </div>
     <div id="navigation">
-            <button>Forrige</button>
-            <button>Næste</button>
-        </div>
+            <button onclick="nextQuestion">Forrige</button>
+            <button onclick="previousQuestion">Næste</button>
+    </div>
   </div>
 
 </template>
