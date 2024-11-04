@@ -12,9 +12,9 @@
   <br><hr><br>
   <Quiz1 />
   <br><hr><br>
-  <Quiz2 />
-  <br><hr><br>
-  <Quiz3 />
+ 
+
+ 
 </template>
 
 <style>

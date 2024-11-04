@@ -9,18 +9,6 @@ let data = ref([{
                 "hellogalaxy","worldhello"
             ]
         }
-    },{
-        questions: {
-            question: "hello world",
-            type: 0,
-            answers: [
-            'Hårtab', 'Søvnmangel' , 'Træthed' ,
-            'Hudproblemer' ,
-            'Fordøjelsesproblemer' 
-            ]
-
-
-        }
     }]);
 let currentData = ref("");
 
@@ -30,7 +18,7 @@ let currentData = ref("");
 
 
 
-let update = () => {
+
 
     fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
     method: "GET"})
@@ -47,26 +35,28 @@ let update = () => {
 
 
    
+
+
+
+let update = () => {
+    currentData.value = data.value[currentQuestion].questions;
+
+
 }
-
-
-let update2 = () => {
-    currentData.value = data.value[1].questions;
-
-
-}
-update2(); 
+update(); 
 
 console.log(" ");
 console.log(data);
 console.log(data[0]);
 let previousQuestion = ()=>{
 currentQuestion-=1;
-
+update(); 
 }
 let nextQuestion = ()=>{
-currentQuestion+=1;
-
+    if(currentQuestion < data.value.length){
+        currentQuestion+=1;
+        update();
+    }
 }
 </script>
 
@@ -118,31 +108,10 @@ currentQuestion+=1;
      
     </div>
     <div id="navigation">
-            <button onclick="nextQuestion">Forrige</button>
-            <button onclick="previousQuestion">Næste</button>
+            <button v-on:click="previousQuestion()">Forrige</button>
+            <button v-on:click="nextQuestion()">Næste</button>
     </div>
    
-  <div class="QuizBox">
-    <h1>Hello World</h1>
-    <div id="options">
-      <div class="option">
-        <input type="radio" name="choice" value="choice-1" id="choice-1" checked>
-        <label for="choice-1">Choice 1</label>
-      </div>
-      <div class="option">
-        <input type="radio" name="choice" value="choice-2" id="choice-2">
-        <label for="choice-2">Choice 2</label>
-      </div>
-      <div class="option">
-        <input type="radio" name="choice" value="choice-3" id="choice-3">
-        <label for="choice-3">Choice 3</label>
-      </div>
-    </div>
-    <div id="navigation">
-            <button onclick="nextQuestion">Forrige</button>
-            <button onclick="previousQuestion">Næste</button>
-    </div>
-  </div>
 
 </template>
 
