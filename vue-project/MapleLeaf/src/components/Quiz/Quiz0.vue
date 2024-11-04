@@ -1,5 +1,49 @@
 <script setup>
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {getVertexAI,getGenerativeModel} from "firebase/vertexai";
 import{ref} from "vue";
+
+let secret;
+await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json",{
+    method: "GET"})
+        .then((response) => {
+            return response.json()
+        })
+        .then((result) => {
+            secret = result[Object.keys(result)];
+            
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+// Your web app's Firebase configuration
+const firebaseConfig = secret;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+//initialize the Vertex AI service
+const vertexAI = getVertexAI(app);
+
+const model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
+
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth(app);
+//wrap en an async function som can use await
+async function run(){ 
+    //provide a prompt that contains text
+    const prompt = "write a story about a magic backpack in 5 lines."
+    //to generate text output, call generate content with the text input
+    const result = await model.generateContent(prompt);
+    const response = result.response
+    const text = response.text();
+    console.log(text);
+    
+}
+run();
+
+
+
 let quizQuestion =  ref([
     {text: "Rangere dit energi level",
         optionsEnergi:[
@@ -9,6 +53,7 @@ let quizQuestion =  ref([
             {text:"over gennemsnittet", prompt: "jeg har over gennemsnittet energi"},
             {text:"høj", prompt: "jeg har høj Energi"}
         ],
+
     }
 
 
