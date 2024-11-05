@@ -4,43 +4,38 @@ import { getAuth } from "firebase/auth";
 import {getVertexAI,getGenerativeModel} from "firebase/vertexai";
 import{ref} from "vue";
 
-let secret;
-await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json",{
+let firebaseConfig;
+let auth;
+let vertexAI;
+let model;
+
+fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json",{
     method: "GET"})
         .then((response) => {
             return response.json()
         })
         .then((result) => {
-            secret = result[Object.keys(result)];
-            
+            firebaseConfig = result[Object.keys(result)];
+        
+        // Initialize Firebase only after configuration is fetched
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        vertexAI = getVertexAI(app);
+        model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
+
+        
+        console.log("Firebase initialized successfully.");
         })
         .catch((error) => {
-            console.error(error);
+            console.error("Error fetching Firebase config or initializing Firebase:"+error);
         });
 
-// Your web app's Firebase configuration
-const firebaseConfig = secret;
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-//initialize the Vertex AI service
-const vertexAI = getVertexAI(app);
 
-const model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
 
-// Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
-//wrap en an async function som can use await
-async function run(){ 
-    //provide a prompt that contains text
-    const prompt = "write a story about a magic backpack in 5 lines."
-    //to generate text output, call generate content with the text input
-    const result = await model.generateContent(prompt);
-    const response = result.response
-    const text = response.text();
-    console.log(text);
-    
-}
-run();
+
+
+
+
 
 
 
@@ -59,12 +54,19 @@ let quizQuestion =  ref([
 
 ]);
 let userAnswers= [];
-let answer1 = ref('');
-answer1 = quizQuestion[0].optionsEnergi[0].text; 
-answer2 = quizQuestion[1].optionsEnergi[1].text;
-answer3 = quizQuestion[2].optionsEnergi[2].text;
-answer4 = quizQuestion[3].optionsEnergi[3].text;
-answer5 = quizQuestion[4].optionsEnergi[4].text;
+async function run(){ 
+    
+
+    //to generate text output, call generate content with the text input
+    const result = await model.generateContent(prompt);
+    const response = result.response
+    const text = response.text();
+    
+
+}
+
+
+run();
 </script>
 
 <template>
@@ -72,25 +74,26 @@ answer5 = quizQuestion[4].optionsEnergi[4].text;
         <h1>Rangere dit energi
             level?</h1>
         <div id="options">
+
             <div class="option">
-                <input type="checkbox" name="meget lav" value="meget lav" id="meget lav" checked>
+                <input type="checkbox" name="meget lav" value="meget lav" id="megetlav" checked>
                 <label for="meget lav"> {{quizQuestion[0].optionsEnergi[0].text}}</label>
             </div>
             <div class="option">
                 <input type="checkbox" name="lav" value="lav" id="lav">
-                <label for="lav"> {{ quizQuestion[1].optionsEnergi[1].text}}</label>
+                <label for="lav"> {{ quizQuestion[0].optionsEnergi[1].text}}</label>
             </div>
             <div class="option">
                 <input type="checkbox" name="middel" value="middel" id="middel">
-                <label for="middel"> {{quizQuestion[2].optionsEnergi[2].text}}</label>
+                <label for="middel"> {{quizQuestion[0].optionsEnergi[2].text}}</label>
             </div>
             <div class="option">
                 <input type="checkbox" name="over gennemsnit" value="over gennemsnit" id="over gennemsnit">
-                <label for="over gennemsnit"> {{quizQuestion[3].optionsEnergi[3].text}}</label>
+                <label for="over gennemsnit"> {{quizQuestion[0].optionsEnergi[3].text}}</label>
             </div>
             <div class="option">
                 <input type="checkbox" name="høj" value="høj" id="høj">
-                <label for="høj"> {{quizQuestion[4].optionsEnergi[4].text}}</label>
+                <label for="høj"> {{quizQuestion[0].optionsEnergi[4].text}}</label>
             </div>
         </div>
         <div id="navigation">
