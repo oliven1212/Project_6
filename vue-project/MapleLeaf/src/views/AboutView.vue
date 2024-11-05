@@ -11,7 +11,7 @@
   <NavBar />
   <br><hr><br>
 
-  <Quiz0/>
+  <Quiz1/>
   <br><hr><br>
 
  
