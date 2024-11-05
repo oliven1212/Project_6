@@ -12,7 +12,7 @@
                 <img src="../assets/icons/homeIcon.png" alt="">
                 <h3>Home</h3>
             </a>
-            <a href="./about">
+            <a href="./Om-os">
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Piller</h3>
             </a>
@@ -24,7 +24,7 @@
                 <img src="../assets/icons/HeadsetIcon.png" alt="">
                 <h3>Kontakt os</h3>
             </a>
-            <a href="./">
+            <a href="./LogInd">
                 <img src="../assets//icons/UserIcon.png" alt="">
                 <h3>Log ind</h3>
             </a>
@@ -57,12 +57,13 @@
         flex-direction: row;
         margin: 20px 0px;
         margin-left: auto;
+        width: 60%;
     }
     #headerItems a{
         display: flex;
         align-items: center;
         flex-direction: column;
-        width: 200px;
+        margin: auto;
         text-decoration: none;
         color: black;
     }
@@ -72,13 +73,14 @@
     }
     #headerItems a img{
         display: block;
-        height: 40px;
+        height: 45px;
         width: auto;
+        padding: 5px;
     }
-    #headerItems a:hover img{
-        box-shadow: 0px 0px 20px #ffaa00c0;    
-        background-color: #ffaa0073;
-        }
+    #headerItems a:hover img {
+        background-color: rgba(170, 170, 170, 0.349);
+        border-radius: 10px;
+       }
     #headerItems a:hover{
         text-decoration: underline;
     }
