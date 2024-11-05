@@ -76,34 +76,19 @@ const generateRecommendations = async () => {
         console.error("Model is not initialized yet.");
         return;
     }
-    recommendations.value = [];// clear previous recommendations
+    
     for (const prompt of prompts.value){
          
+        try{
             const result = await model.generateContent(prompt)
             const responseText = await result.response.text();
             recommendations.value.push(responseText);
+        }catch(error){
+            console.error("error generating content",error);
+        }
         
     }
-}
-
-const run = async () =>{
-    if (!model) {
-        console.error("model is not initalized yet");
-        return;
-    }
-
-
-
-const prompt = createPrompt();
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
-
-    console.log("anbefalede vitaminer og kosttilskud:",response);
-
-
 };
- 
 
 </script>
 
@@ -125,11 +110,12 @@ const prompt = createPrompt();
                 @change="toggleAnswer(option.id)"
                 />
 
-                <Label :for ="option.id">{{ option.text }}</Label>
+                <label :for ="option.id">{{ option.text }}</label>
             </div>
         </div>
     <div id="navigation">
-    <button @click="run"> Næste </button>
+    <button @click="saveprompt"> Næste </button>
+    <button @click="generateRecommendations">hvis Anbefalinger</button>
         </div>
     </div>        
 </template>
