@@ -10,8 +10,10 @@
 <template>
   <NavBar />
   <br><hr><br>
-  <Quiz1 />
+
+  <Quiz0/>
   <br><hr><br>
+
  
 
  
