@@ -74,34 +74,25 @@ run();
         <h1>Rangere dit energi
             level?</h1>
         <div id="options">
-
-            <div class="option">
-                <input type="checkbox" name="meget lav" value="meget lav" id="megetlav" checked>
-                <label for="meget lav"> {{quizQuestion[0].optionsEnergi[0].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="lav" value="lav" id="lav">
-                <label for="lav"> {{ quizQuestion[0].optionsEnergi[1].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="middel" value="middel" id="middel">
-                <label for="middel"> {{quizQuestion[0].optionsEnergi[2].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="over gennemsnit" value="over gennemsnit" id="over gennemsnit">
-                <label for="over gennemsnit"> {{quizQuestion[0].optionsEnergi[3].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="høj" value="høj" id="høj">
-                <label for="høj"> {{quizQuestion[0].optionsEnergi[4].text}}</label>
+            <div 
+             v-for="(options, index) in quizQuestion[0].optionsEnergi"
+             :key="index"
+             class="option"
+            >
+                <input
+                type="checkbox"
+                :id="option.id"
+                :value="option.id"
+                :checked="userAnswers.includes(option.id)"
+                @change="toggleAnswer(options.id)"
+                />
+                <Label :for ="options.id">{{ option.text }}</Label>
             </div>
         </div>
         <div id="navigation">
-            <button>Forrige</button>
-            <button>Næste</button>
+        <button @click="run"> Næste </button>
         </div>
-    </div>
-
+    </div>        
 </template>
 
 <style scoped>
