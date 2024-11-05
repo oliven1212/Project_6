@@ -42,31 +42,54 @@ fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/sec
 let quizQuestion =  ref([
     {text: "Rangere dit energi level",
         optionsEnergi:[
-            {text:"Meget lav", prompt: "jeg har meget lav energi"},
-            {text:"lav", prompt: "jeg harlav energi"},
-            {text:"Moderat", prompt: "jeg har moderatenergi"},
-            {text:"over gennemsnittet", prompt: "jeg har over gennemsnittet energi"},
-            {text:"høj", prompt: "jeg har høj Energi"}
+            {text:"Meget lav", prompt: "jeg har meget lav energi", id:"megetlav"},
+            {text:"lav", prompt: "jeg harlav energi",id:"lav"},
+            {text:"Moderat", prompt: "jeg har moderatenergi",id:"moderat"},
+            {text:"over gennemsnittet", prompt: "jeg har over gennemsnittet energi",id:"over gennemsnittet"},
+            {text:"høj", prompt: "jeg har høj Energi",id:"høj"}
         ],
 
     }
 
 
 ]);
-let userAnswers= [];
-async function run(){ 
+let userAnswers=ref([]);
+function toggleAnswer(id){
+    const index = userAnswers.value.indexOf(id);
+    if(index === -1){
+        userAnswers.push.value(id)
     
-
-    //to generate text output, call generate content with the text input
-    const result = await model.generateContent(prompt);
-    const response = result.response
-    const text = response.text();
-    
-
+    }
+    else{
+        userAnswers.value.splice(index,1)
+    }
 }
+    function createPrompt(){
+        const selectedOption = quizQuestion.value[0].find(option => userAnswers.value.includes(option.id)
+    );
+    return selectedOption
+    ? `Brugeren har angivet følgende energiniveau: ${selectedOption.prompt}. Giv anbefalinger til relevante vitaminer og kosttilskud, der kan hjælpe med at optimere energiniveau og generelle sundhed.`
+    : `ingen energi information er angivet`
+    }
 
 
+
+async function run()
+{ 
+    if(!model.value){
+        console.error("Model is not inetialized yet.")
+        return;
+    }
+const prompt = createPrompt();
+try {
+    const result = await model.value.generateContent(prompt);
+    console.log("anbefalede vitaminer og kosttilskud:",result.response.text())
+} catch (error){
+    console.error("Error generating content:",error)
+}
+}
 run();
+
 </script>
 
 <template>
@@ -86,11 +109,12 @@ run();
                 :checked="userAnswers.includes(option.id)"
                 @change="toggleAnswer(options.id)"
                 />
+
                 <Label :for ="options.id">{{ option.text }}</Label>
             </div>
         </div>
-        <div id="navigation">
-        <button @click="run"> Næste </button>
+    <div id="navigation">
+    <button @click="run"> Næste </button>
         </div>
     </div>        
 </template>
