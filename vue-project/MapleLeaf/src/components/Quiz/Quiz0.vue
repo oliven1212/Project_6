@@ -4,67 +4,107 @@ import { getAuth } from "firebase/auth";
 import {getVertexAI,getGenerativeModel} from "firebase/vertexai";
 import{ref} from "vue";
 
-let secret;
-await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json",{
-    method: "GET"})
-        .then((response) => {
-            return response.json()
-        })
-        .then((result) => {
-            secret = result[Object.keys(result)];
-            
-        })
-        .catch((error) => {
-            console.error(error);
+let firebaseConfig;
+let auth;
+let vertexAI;
+let model;
+
+const initializeFirebase = async () => {
+    try {
+        const response = await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json", {
+            method: "GET"
         });
+        const result = await response.json();
+        firebaseConfig = result[Object.keys(result)];
 
-// Your web app's Firebase configuration
-const firebaseConfig = secret;
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-//initialize the Vertex AI service
-const vertexAI = getVertexAI(app);
+        // Initialize Firebase after fetching configuration
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        vertexAI = getVertexAI(app);
+        model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
 
-const model = getGenerativeModel(vertexAI,{model : "gemini-1.5-flash"});
+        console.log("Firebase initialized successfully.");
+    } catch (error) {
+        console.error("Error fetching Firebase config or initializing Firebase:", error);
+    }
+};
+initializeFirebase();
 
-// Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
-//wrap en an async function som can use await
-async function run(){ 
-    //provide a prompt that contains text
-    const prompt = "write a story about a magic backpack in 5 lines."
-    //to generate text output, call generate content with the text input
-    const result = await model.generateContent(prompt);
-    const response = result.response
-    const text = response.text();
-    console.log(text);
-    
-}
-run();
-
-
-
-let quizQuestion =  ref([
-    {text: "Rangere dit energi level",
+let quizQuestion = ref([
+    {
+        text: "Rangere dit energi level",
         optionsEnergi:[
-            {text:"Meget lav", prompt: "jeg har meget lav energi"},
-            {text:"lav", prompt: "jeg harlav energi"},
-            {text:"Moderat", prompt: "jeg har moderatenergi"},
-            {text:"over gennemsnittet", prompt: "jeg har over gennemsnittet energi"},
-            {text:"høj", prompt: "jeg har høj Energi"}
-        ],
+            {text:"Meget lav", prompt: "jeg har meget lav energi", id: "megetlav"},
+            {text:"lav", prompt: "jeg harlav energi",id: "lav"},
+            {text:"Moderat", prompt: "jeg har moderatenergi",id: "moderat"},
+            {text:"over gennemsnittet", prompt: "jeg har over gennemsnittet energi",id: "over gennemsnittet"},
+            {text:"høj", prompt: "jeg har høj Energi",id: "høj"}
+        ]
 
     }
 
 
 ]);
-let userAnswers= [];
-let answer1 = ref('');
-answer1 = quizQuestion[0].optionsEnergi[0].text; 
-answer2 = quizQuestion[1].optionsEnergi[1].text;
-answer3 = quizQuestion[2].optionsEnergi[2].text;
-answer4 = quizQuestion[3].optionsEnergi[3].text;
-answer5 = quizQuestion[4].optionsEnergi[4].text;
+let userAnswers=ref([]);
+let prompts = ref([]); // store prompts for hver spørgsmål
+let recommendations = ref([]); // udskriver alle anbefalingerne
+
+function toggleAnswer(id){
+    const index = userAnswers.value.indexOf(id);
+    if(index === -1){
+        userAnswers.value.push(id)
+    
+    } else{
+        userAnswers.value.splice(index,1);
+    }
+}
+    function createPrompt() {
+        const selectedOption = quizQuestion.value[0].optionsEnergi.find(option => userAnswers.value.includes(option.id));
+    return selectedOption
+    ? `Brugeren har angivet følgende energiniveau: ${selectedOption.prompt}. Giv anbefalinger til relevante vitaminer og kosttilskud, der kan hjælpe med at optimere energiniveau og generelle sundhed.`
+    : `ingen energi information er angivet`;
+    }
+
+    function saveprompt(){
+        const prompt = createPrompt();
+        prompts.value.push(prompt); // skubber hver prompt ind i array
+        console.log("prompt saved:",prompt);
+
+    }
+const generateRecommendations = async () => {
+    if (!model){
+        console.error("Model is not initialized yet.");
+        return;
+    }
+    recommendations.value = [];// clear previous recommendations
+    for (const prompt of prompts.value){
+         
+            const result = await model.generateContent(prompt)
+            const responseText = await result.response.text();
+            recommendations.value.push(responseText);
+        
+    }
+}
+
+const run = async () =>{
+    if (!model) {
+        console.error("model is not initalized yet");
+        return;
+    }
+
+
+
+const prompt = createPrompt();
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response.text();
+
+    console.log("anbefalede vitaminer og kosttilskud:",response);
+
+
+};
+ 
+
 </script>
 
 <template>
@@ -72,33 +112,26 @@ answer5 = quizQuestion[4].optionsEnergi[4].text;
         <h1>Rangere dit energi
             level?</h1>
         <div id="options">
-            <div class="option">
-                <input type="checkbox" name="meget lav" value="meget lav" id="meget lav" checked>
-                <label for="meget lav"> {{quizQuestion[0].optionsEnergi[0].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="lav" value="lav" id="lav">
-                <label for="lav"> {{ quizQuestion[1].optionsEnergi[1].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="middel" value="middel" id="middel">
-                <label for="middel"> {{quizQuestion[2].optionsEnergi[2].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="over gennemsnit" value="over gennemsnit" id="over gennemsnit">
-                <label for="over gennemsnit"> {{quizQuestion[3].optionsEnergi[3].text}}</label>
-            </div>
-            <div class="option">
-                <input type="checkbox" name="høj" value="høj" id="høj">
-                <label for="høj"> {{quizQuestion[4].optionsEnergi[4].text}}</label>
-            </div>
-        </div>
-        <div id="navigation">
-            <button>Forrige</button>
-            <button>Næste</button>
-        </div>
-    </div>
+            <div 
+             v-for="(option, index) in quizQuestion[0].optionsEnergi"
+             :key="index"
+             class="option"
+            >
+                <input
+                type="checkbox"
+                :id="option.id"
+                :value="option.id"
+                :checked="userAnswers.includes(option.id)"
+                @change="toggleAnswer(option.id)"
+                />
 
+                <Label :for ="option.id">{{ option.text }}</Label>
+            </div>
+        </div>
+    <div id="navigation">
+    <button @click="run"> Næste </button>
+        </div>
+    </div>        
 </template>
 
 <style scoped>
