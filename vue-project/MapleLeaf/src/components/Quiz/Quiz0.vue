@@ -1,52 +1,53 @@
 <script setup>
+import { onMounted, ref } from "vue";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {getVertexAI,getGenerativeModel} from "firebase/vertexai";
-import{ref} from "vue";
+import { getVertexAI, getGenerativeModel } from "firebase/vertexai";
 
 let firebaseConfig;
 let auth;
 let vertexAI;
 let model;
 let currentQuestion = 0;
-let data = ref([]);
+let data = ref(null);
 let currentData = ref("");
 
-
-fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
-    method: "GET"})
-        .then((response) => {
-            return response.json()
-        })
-        .then((result) => {
-            data.value =  result;
-            
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-
-
 const initializeFirebase = async () => {
-    try {
-        const response = await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json", {
-            method: "GET"
-        });
-        const result = await response.json();
-        firebaseConfig = result[Object.keys(result)];
-
-        // Initialize Firebase after fetching configuration
-        const app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        vertexAI = getVertexAI(app);
-        model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
-
-        console.log("Firebase initialized successfully.");
-    } catch (error) {
-        console.error("Error fetching Firebase config or initializing Firebase:", error);
-    }
+  try {
+    const response = await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/secret.json", { method: "GET" });
+    const result = await response.json();
+    firebaseConfig = result[Object.keys(result)];
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    vertexAI = getVertexAI(app);
+    model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
+    console.log("Firebase initialized successfully.");
+  } catch (error) {
+    console.error("Error fetching Firebase config or initializing Firebase:", error);
+  }
 };
-initializeFirebase();
+
+const getData = async () => {
+  try {
+    const response = await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json", { method: "GET" });
+    data.value = await response.json();
+    update();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const update = () => {
+  if (data.value && data.value[currentQuestion]) {
+    currentData.value = { ...data.value[currentQuestion].questions };
+  }
+};
+
+// Call async functions after mounting to avoid returning promises in `setup`
+onMounted(() => {
+  initializeFirebase();
+  getData();
+});
 
 let quizQuestion = ref([
     {
@@ -107,11 +108,23 @@ const generateRecommendations = async () => {
         
     }
 };
+let previousQuestion = ()=>{
+    if(currentQuestion > 0){
+        currentQuestion-=1;
+        update(); 
+    }
+}
+let nextQuestion = ()=>{
+    if(currentQuestion < data.value.length-1){
+        currentQuestion+=1;
+        update();
+    }
+}
 
 </script>
 
 <template>
-    <div class="QuizBox" >
+    <div class="QuizBox" v-if="1==2" >
         <h1>Rangere dit energi
             level?</h1>
         <div id="options">
@@ -132,11 +145,11 @@ const generateRecommendations = async () => {
             </div>
         </div>
     </div>
-        <div class="QuizBox">
+    <div class="QuizBox" v-if="data">
         <h1>{{ currentData.question }}</h1>
         <div id="options">
             <div v-if="currentData.type == 0">
-               <div v-for="Opt in currentData.answers">
+                <div v-for="Opt in currentData.answers">
                     <div class="option">
                         <input type="checkbox" :name="Opt" :value="Opt" :id="Opt">
                         <label :for="Opt"> {{ Opt }}</label>
@@ -146,30 +159,28 @@ const generateRecommendations = async () => {
 
 
             <div v-else-if="currentData.type == 1" >
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-1" id="choice-1">
-                    <label for="choice-1">Choice 1</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-2" id="choice-2">
-                    <label for="choice-2">Choice 2</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-3" id="choice-3">
-                    <label for="choice-3">Choice 3</label>
+                <div v-for="Opt in currentData.answers">
+                    <div class="option">
+                        <input type="radio" name="Optionss" :value="Opt" :id="Opt">
+                        <label :for="Opt"> {{ Opt }}</label>
+                    </div>
                 </div>
             </div>
-
 
         
             <div v-else-if="currentData.type == 2" >
-                <input type=" text" class="inputText"/>
+                <div class="option">
+                    <input type=" text" id="textType2" class="inputText"/>
+                </div>  
             </div>
-        </div>
+        </div>    
     </div>
-    <div id="navigation">
-    <button @click="saveprompt"> Næste </button>
-    <button @click="generateRecommendations">hvis Anbefalinger</button>
+    <div v-if="data" id="navigation">
+    <button @click="saveprompt()"> Næste </button>
+    <button v-if="data.lenght == currentQuestion" @click="generateRecommendations()">hvis Anbefalinger</button>
+    <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
+    <button v-if="currentData.type != 3" v-on:click="nextQuestion()"class="buttons">Næste</button>
+
     </div> 
            
 </template>
@@ -180,42 +191,63 @@ const generateRecommendations = async () => {
     width: 100%;
     margin: auto;
 
-}
-.QuizBox h1{
-    margin:auto;
-    margin-top: 50px;
-    width: 50%;
-}
-.option{
-    border-style:solid;
-    border-radius: 10px;
-    border-width: 2px;
-    width: 40%;
-    margin: 15px auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-label{
-    margin-left: 5px;
-    width: 80%;
-}
-#navigation{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 50px 10%;
-    
-}
-#navigation button{
-    width: 150px;
-    height: 75px;
-    border-radius: 20px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
-    background-color: deeppink;    
-}
+  }
+  .QuizBox h1{
+      margin:auto;
+      margin-top: 50px;
+      width: 50%;
+  }
+  .option{
+      border-style:solid;
+      border-radius: 10px;
+      border-width: 2px;
+      width: 40%;
+      height: 100%;
+      margin: 15px auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+  }
+  label{
+      margin-left: 22px;
+      margin-right: 10px;
+      width: 100%;
+
+  }
+  #navigation{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 50px 10%;
+      
+  }
+ .buttons{
+      width: 150px;
+      height: 75px;
+      border-radius: 20px;
+      border-style: solid;
+      border-width: 2px;
+      border-color: black;
+      background-color: lightgrey;    
+  }
+  .inputText{
+    width: 70%;
+    margin: auto;
+  }
+
+  
+  select{
+    width: 70%;
+  }
+  .Cross {
+    width: 30px;
+    margin-left: 10px;
+    background-color: rgb(255, 165, 165);
+    border-width: 1px;
+  } 
+  .Cross img {
+    width: 100%;
+  }
 
 </style>
