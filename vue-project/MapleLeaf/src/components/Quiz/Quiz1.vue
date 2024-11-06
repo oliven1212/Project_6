@@ -46,9 +46,6 @@ let putDatabase =()=>{
 }
 let update = () => {
     currentData.value = {...data.value[currentQuestion].questions};
-    console.log("------------------------------------------------");
-    console.log(currentData);
-    console.log(data.value[currentQuestion].questions);
 }
 
 //denne funktion gemmer dataen fra skemaet til databasen
@@ -245,7 +242,7 @@ let CancelEditing = () => {
   }
   .Cross {
     width: 30px;
-    margin-left: 10px;
+    margin-left: 4px;
     background-color: rgb(255, 165, 165);
     border-width: 1px;
   } 
