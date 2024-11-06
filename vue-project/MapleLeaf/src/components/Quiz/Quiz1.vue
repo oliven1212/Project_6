@@ -1,45 +1,29 @@
 <script setup>
 import {ref} from "vue";
 let currentQuestion = 0;
-let data = ref([{
-        questions: {
-            question: "hello world",
-            type: 0,
-            answers: [
-                "hellogalaxy","worldhello"
-            ]
-        }
-
-
-    }]);
+let data;
 let currentData = ref("");
-let temptype = ref(0);
 
-
-
-
-
-
-
-
-
-
-
-    fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
-    method: "GET"})
-        .then((response) => {
-            return response.json()
-        })
-        .then((result) => {
-            data.value =  result;
-            
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-
+const getData = async () => {
+        await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
+        method: "GET"})
+            .then((response) => {
+                return response.json()
+            })
+            .then((result) => {
+                data = ref(result);
+                update(); 
+                
+            })
+            .catch((error) => {
+                console.error(error);
+            });
         
-    let putDatabase =()=>{
+    }
+
+    getData();
+
+let putDatabase =()=>{
     fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json", {
         method: "PUT",
         headers: {
@@ -54,20 +38,23 @@ let temptype = ref(0);
         })
         .catch((error) => {
             console.error("Fejl ved overskrivning af data:", error);
+        })
+        .finally(() => {
+            update(); // Opdater for at vise de nye data uanset resultat
         });
-    }
-let update = () => {
-
-    currentData.value = data.value[currentQuestion].questions;
-
 
 }
-update(); 
+let update = () => {
+    currentData.value = {...data.value[currentQuestion].questions};
+    console.log("------------------------------------------------");
+    console.log(currentData);
+    console.log(data.value[currentQuestion].questions);
+}
 
 //denne funktion gemmer dataen fra skemaet til databasen
 let saveQuestion = () => {
     let answer = [];
-    if(temptype != 2){
+    if(parseInt(document.getElementById("listeType").value) != "2"){
         for(let i = 0; i < inputBoxes.value.length; i++){
             answer.push(document.getElementById("inputbox"+i).value);
         }
@@ -76,14 +63,14 @@ let saveQuestion = () => {
     data.value.push({
             questions: {
                 question: document.getElementById("inputTitel").value,
-                type: temptype,
-                answers: [...answer],
-            },
+                type: parseInt(document.getElementById("listeType").value),
+                answers: [...answer]
+            }
         });  
         currentQuestion = data.value.length-1;
-        update();
         console.log(data.value.questions);
         putDatabase();
+        update(); 
 }
 
 let inputBoxes = ref([]);
@@ -105,15 +92,12 @@ let deleteQuestion = () => {
         data.value.splice(currentQuestion, 1);
         currentQuestion = 0; 
         putDatabase();
-        update();
     } else {
         alert("Der skal være mindst ét spørgsmål tilbage!");
     }
+    update(); 
 };
 
-console.log(" ");
-console.log(data);
-console.log(data[0]);
 let previousQuestion = ()=>{
     if(currentQuestion > 0){
         currentQuestion-=1;
@@ -124,21 +108,24 @@ let nextQuestion = ()=>{
     if(currentQuestion < data.value.length-1){
         currentQuestion+=1;
         update();
-
     }
 }
 
+let CancelEditing = () => {
+    currentQuestion = 0;
+  
+    update();
+}
 
-let isEditing = false;
 
 </script>
 
 <template>
-      <div class="QuizBox">
+    <div class="QuizBox" v-if="data">
         <h1 v-if="currentData.type != 3">{{ currentData.question }}</h1>
         <div id="options">
             <div v-if="currentData.type == 0">
-               <div v-for="Opt in currentData.answers">
+                <div v-for="Opt in currentData.answers">
                     <div class="option">
                         <input type="checkbox" :name="Opt" :value="Opt" :id="Opt">
                         <label :for="Opt"> {{ Opt }}</label>
@@ -156,7 +143,6 @@ let isEditing = false;
                 </div>
             </div>
 
-
         
             <div v-else-if="currentData.type == 2" >
                 <div class="option">
@@ -172,7 +158,7 @@ let isEditing = false;
                 </div>
                 <div class="option">
                     <label for="listeType">Vælg format</label>
-                <select v-model="temptype" name="" id="listeType">
+                <select name="" id="listeType">
                     <option value="0">Flere svarmuligheder</option>
                     <option value="1">En svarmulighed</option>
                     <option value="2">Skrevet svar</option>
@@ -183,23 +169,17 @@ let isEditing = false;
                     <label :for="input">Svar  {{ index+1 }}: </label>
                     <input type="text" :id="input" class="inputText"/>
                     <button class="Cross" ><img src="../../assets/icons/CrossIcon.png" alt=""></button>
-                </div>
-                
+                </div> 
             </div>
-            </div>
-     
-    </div>
-    <div v-if="isEditing">
-            <h2>Rediger Spørgsmål</h2>
-            <input v-model="editInput" type="text" class="inputText" />
-            <button @click="saveEditedQuestion" class="buttons">Gem Ændringer</button>
-            <button @click="isEditing = false" class="buttons">Annuller</button>
         </div>
+    </div>
+
     <div id="navigation">
         <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
         <button v-if="currentData.type != 3" v-on:click="addQuestion()"class="buttons">Tilføj Spørgsmål</button> 
         <button v-if="currentData.type != 3" v-on:click="deleteQuestion()"class="buttons">Slet Spørgsmål</button> 
         <button v-if="currentData.type != 3" v-on:click="saveChanges()"class="buttons">Redigere spørgsmål</button> 
+        <button v-if="currentData.type == 3" v-on:click="CancelEditing()" class="buttons">Annuler</button>
         <button v-if="currentData.type == 3" v-on:click="addInputbox()" class="buttons">Tilføj input</button>
         <button v-if="currentData.type == 3" v-on:click="saveQuestion()"class="buttons">Gem svar</button>
         <button v-if="currentData.type != 3" v-on:click="nextQuestion()"class="buttons">Næste</button>
