@@ -101,8 +101,10 @@ let addInputbox = () => {
 
 let deleteQuestion = () => {
     if (data.value.length > 1) { // Sørg for, at der er mindst ét spørgsmål tilbage
+        console.log(data.value[currentQuestion]);
         data.value.splice(currentQuestion, 1);
-        currentQuestion = Math.min(currentQuestion, data.value.length - 1); // Juster `currentQuestion`
+        currentQuestion = 0; 
+        putDatabase();
         update();
     } else {
         alert("Der skal være mindst ét spørgsmål tilbage!");
@@ -146,24 +148,20 @@ let isEditing = false;
 
 
             <div v-else-if="currentData.type == 1" >
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-1" id="choice-1">
-                    <label for="choice-1">Choice 1</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-2" id="choice-2">
-                    <label for="choice-2">Choice 2</label>
-                </div>
-                <div class="option">
-                    <input type="radio" name="choice" value="choice-3" id="choice-3">
-                    <label for="choice-3">Choice 3</label>
+                <div v-for="Opt in currentData.answers">
+                    <div class="option">
+                        <input type="radio" :name="Opt" :value="Opt" :id="Opt">
+                        <label :for="Opt"> {{ Opt }}</label>
+                    </div>
                 </div>
             </div>
 
 
         
             <div v-else-if="currentData.type == 2" >
-                <input type=" text" class="inputText"/>
+                <div class="option">
+                    <input type=" text" id="textType2" class="inputText"/>
+                </div>  
             </div>
 
 
@@ -184,6 +182,7 @@ let isEditing = false;
                 <div v-for="(input,index) in inputBoxes" class="option">
                     <label :for="input">Svar  {{ index+1 }}: </label>
                     <input type="text" :id="input" class="inputText"/>
+                    <button class="Cross" ><img src="../../assets/icons/CrossIcon.png" alt=""></button>
                 </div>
                 
             </div>
@@ -197,9 +196,9 @@ let isEditing = false;
             <button @click="isEditing = false" class="buttons">Annuller</button>
         </div>
     <div id="navigation">
-            <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
-            <button v-if="currentData.type != 3" v-on:click="addQuestion()"class="buttons">Tilføj Spørgsmål</button> 
-        <button v-on:click="deleteQuestion()"class="buttons">Slet Spørgsmål</button> 
+        <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
+        <button v-if="currentData.type != 3" v-on:click="addQuestion()"class="buttons">Tilføj Spørgsmål</button> 
+        <button v-if="currentData.type != 3" v-on:click="deleteQuestion()"class="buttons">Slet Spørgsmål</button> 
         <button v-if="currentData.type != 3" v-on:click="saveChanges()"class="buttons">Redigere spørgsmål</button> 
         <button v-if="currentData.type == 3" v-on:click="addInputbox()" class="buttons">Tilføj input</button>
         <button v-if="currentData.type == 3" v-on:click="saveQuestion()"class="buttons">Gem svar</button>
@@ -236,7 +235,8 @@ let isEditing = false;
   label{
       margin-left: 22px;
       margin-right: 10px;
-      width: 25%;
+      width: 100%;
+
   }
   #navigation{
       display: flex;
@@ -262,6 +262,15 @@ let isEditing = false;
   
   select{
     width: 70%;
+  }
+  .Cross {
+    width: 30px;
+    margin-left: 10px;
+    background-color: rgb(255, 165, 165);
+    border-width: 1px;
+  } 
+  .Cross img {
+    width: 100%;
   }
 
 </style>
