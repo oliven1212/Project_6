@@ -1,7 +1,7 @@
 <script setup>
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword, signOut, onAuthStateChanged,updateProfile  } from "firebase/auth";
+import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword, signOut, onAuthStateChanged,updateProfile,deleteUser  } from "firebase/auth";
 import { ref,onMounted } from 'vue';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -15,7 +15,6 @@ let isFirebaseInitialized = ref(false);
 let LogInOut = ref(true); // login/signup toggle
 let emailInput = ref("");
 let passwordInput = ref("");
-let userName = ref("");
 
 onMounted(async ()=>{
     try {
@@ -40,6 +39,17 @@ onMounted(async ()=>{
         });
     });
 let signUp = async () => {
+    if(emailInput.value.length <= 0){
+        alert("skriv en gyldig email");
+        return;
+    }else if(passwordInput.value.length <= 5){
+        alert("skriv et gyldigt password");
+        return;
+    }else if(auth.value.currentUser != null){
+        alert(`Du er allerede logget ind som ${auth.value.currentUser.email}`)
+        return;
+    }
+
     if (!isFirebaseInitialized.value) return;
     try {
         await createUserWithEmailAndPassword(auth.value, emailInput.value, passwordInput.value);
@@ -50,6 +60,14 @@ let signUp = async () => {
 
 
 let signIn = async () => {
+    if(emailInput.value.length <= 0){
+        alert("skriv en gyldig email");
+        return;
+    }else if(passwordInput.value.length <= 5){
+        alert("skriv et gyldigt password");
+        return;
+    }
+
     if (!isFirebaseInitialized.value) return;
     try {
         await signInWithEmailAndPassword(auth.value, emailInput.value, passwordInput.value);
@@ -60,7 +78,10 @@ let signIn = async () => {
 
 
 let logOut = async () => {
-    if (!isFirebaseInitialized.value) return;
+    if(auth.value.currentUser == null) {
+        alert("Login eller opret dig for at logge ud");
+        return;
+    }
     try {
         await signOut(auth.value);
     } catch (error) {
@@ -73,6 +94,9 @@ let changeLogInOption = () => {LogInOut.value = !LogInOut.value;}
 
 
 let logUser = () => {
+    if(auth.value.currentUser == null){
+        alert("Login eller opret dig for at se hvem du er");
+        return};
     if(auth.value.currentUser.displayName != null){
         alert(`Dit navn er ${auth.value.currentUser.displayName}\nEmailen du er logget ind med er ${auth.value.currentUser.email}\nDit password er ...`);
     }else{
@@ -83,6 +107,10 @@ let logUser = () => {
 
 
 let updateUsername = () =>{
+    if(auth.value.currentUser == null){
+        alert("Login eller opret dig for at tilføje et brugernavn");
+        return;
+    }
     const newName = prompt("Skriv dit navn ",auth.value.currentUser.email);
     if(newName != null){
         updateProfile(auth.value.currentUser, {
@@ -95,6 +123,22 @@ let updateUsername = () =>{
             });
     }
 }
+
+let removeUser = () => {
+    if(auth.value.currentUser == null) {
+        alert("Login eller opret dig for at fjerne dig permanent");
+        return;
+    }
+    if(confirm("Vil du slete din bruger permanent?")){
+        deleteUser(auth.value.currentUser).then(() => {
+        // User deleted.
+        }).catch((error) => {
+        // An error ocurred
+        // ...
+        });
+    }
+}
+
 </script>
 
 <template >
@@ -123,6 +167,7 @@ let updateUsername = () =>{
         <button v-on:click="logOut()">Log ud</button>
         <button v-on:click="updateUsername()">Tilføj brugernavn</button>
         <button v-on:click="logUser()">Hvem er jeg?</button>
+        <button v-on:click="removeUser()">Fjern mig permanent</button>
     </div>
 </template>
 
