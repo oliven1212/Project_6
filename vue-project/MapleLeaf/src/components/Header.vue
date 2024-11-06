@@ -16,7 +16,7 @@
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Piller</h3>
             </a>
-            <a href="./">
+            <a href="./adminQuiz">
                 <img src="../assets/icons/GoogleMapLogo.png" alt="">
                 <h3>Find apotek</h3>
             </a>

@@ -67,10 +67,11 @@ update();
 //denne funktion gemmer dataen fra skemaet til databasen
 let saveQuestion = () => {
     let answer = [];
-    for(let i = 0; i < inputBoxes.value.length; i++){
-        answer.push(document.getElementById("inputbox"+i).value);
+    if(temptype != 2){
+        for(let i = 0; i < inputBoxes.value.length; i++){
+            answer.push(document.getElementById("inputbox"+i).value);
+        }
     }
-    
     console.log(answer);
     data.value.push({
             questions: {

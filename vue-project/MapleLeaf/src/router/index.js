@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
 import LogInView from '../views/LogInView.vue';
+import ModQuizView from '../views/ModQuizView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/LogInd',
       name: 'LogIn',
       component: LogInView
+    },
+    {
+      path: '/adminQuiz',
+      name: 'ModQuiz',
+      component: ModQuizView
     }
   ]
 })
