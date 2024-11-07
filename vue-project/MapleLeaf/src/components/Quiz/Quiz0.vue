@@ -9,8 +9,14 @@ let auth;
 let vertexAI;
 let model;
 let currentQuestion = 0;
-let data = ref(null);
 let currentData = ref({ type: null, answers: [] });
+let prompt = `"Analyser og udskriv en liste over vitaminer og kosttilskud,
+ der er anerkendt for deres sundhedsmæssige fordele ifølge den nyeste forskning.
+  Inkluder kun information, der stammer fra data indsamlet efter [sæt en ønsket dato, f.eks. 2022].
+   Sørg for, at alle anbefalinger og beskrivelser er baseret på opdaterede videnskabelige studier og retningslinjer.
+    Liste informationen pr. supplement og dæk følgende punkter: 1) Beskrivelse og primære fordele, 2) Anbefalet daglig dosis, 3)
+     Eventuelle bivirkninger, og 4) Kilder i naturen (hvis relevant). Sørg for, at data og anbefalinger stemmer overens med moderne, evidensbaserede standarder.
+      der kommer en masse spørgsmål og svar du skal forholde dig til. det er dummy data for at vise et eksemple og kan du skrive det"`;
 
 const initializeFirebase = async () => {
   try {
@@ -81,7 +87,7 @@ console.log(saveUserAnswer)
     
 
 function createPrompt() {
-    let promptText = `For question ${currentQuestion + 1}, user selected: `;
+    let promptText = ` For question ${currentData.value.question}, user selected: `;
     
     // Add answer based on the question type
     if (currentData.value.type === 0) {
@@ -95,16 +101,16 @@ function createPrompt() {
         // Text input: free-text answer
         promptText += userAnswers.value[0];
     }
-    
+    // console.log(promptText);
     return promptText;
 }
 function savePrompt() {
-    const prompt = createPrompt();
-    prompts.value.push(prompt);  // Store each prompt for later use
-    console.log("Prompt saved:", prompt);
+    prompt += createPrompt();
+    //prompts.value.push(prompt);  // Store each prompt for later use
+    // console.log("Prompt saved:", prompt);
 }
 
-
+let responseText;
 const generateRecommendations = async () => {
     if (!model) {
         console.error("Model is not initialized yet.");
@@ -116,11 +122,11 @@ const generateRecommendations = async () => {
     
     {
         try {
-          const result = await model.generateContent(...prompts.value);
-
+          const result = await model.generateContent(prompt);
+console.log(prompt);
 const response = result.response;
-const responseText = response.text();  // Adjust if `result.text` directly contains the output
-            
+responseText = ref(response.text());  // Adjust if `result.text` directly contains the output
+            console.log(responseText);
             recommendations.value.push(responseText);
         } catch (error) {
             console.error("Error generating content:", error);
@@ -147,7 +153,7 @@ let nextQuestion = () => {
 </script>
 
 <template>
-    
+    <div v-if="!responseText">
     <div class="QuizBox" v-if="quizQuestion">
   <h1>{{ currentData.question }}</h1>
   <div id="options">
@@ -197,8 +203,11 @@ let nextQuestion = () => {
     <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
     <button v-if="currentData.type != 3" v-on:click="nextQuestion()"class="buttons">Næste</button>
 
-    </div> 
-    
+    </div>
+  </div> 
+    <div>
+      <pre>{{ responseText}}</pre >
+    </div>
            
 </template>
 
