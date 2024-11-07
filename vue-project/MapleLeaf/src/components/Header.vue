@@ -12,11 +12,15 @@
                 <img src="../assets/icons/homeIcon.png" alt="">
                 <h3>Home</h3>
             </a>
-            <a href="./Om-os">
+            <a href="./Quiz">
                 <img src="../assets/icons/PillIcon.png" alt="">
-                <h3>Piller</h3>
+                <h3>Pille Guiden</h3>
             </a>
             <a href="./adminQuiz">
+                <img src="../assets/icons/PillIcon.png" alt="">
+                <h3>Edit Pille Guiden</h3>
+            </a>
+            <a href="./">
                 <img src="../assets/icons/GoogleMapLogo.png" alt="">
                 <h3>Find apotek</h3>
             </a>
@@ -57,7 +61,7 @@
         flex-direction: row;
         margin: 20px 0px;
         margin-left: auto;
-        width: 60%;
+        width: 70%;
     }
     #headerItems a{
         display: flex;
