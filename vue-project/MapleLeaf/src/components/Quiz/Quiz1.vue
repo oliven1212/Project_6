@@ -1,115 +1,150 @@
 <script setup>
 import {ref} from "vue";
-let currentQuestion = 0;
-let data;
-let currentData = ref("");
 
-const getData = async () => {
+// Opsætning af data
+// Først opsætter vi quizstrukturen og klargør, hvordan spørgsmål skal hentes og vises.
+let currentQuestion = 0; // Holder styr på hvilket spørgsmål vi er på
+let data; // henter fra Firebase
+let currentData = ref(""); // Ref til at holde det nuværende spørgsmål
+
+// Slide 1 - Hentning af quizdata
+// Funktionen `getData()` anvender en GET-anmodning til Firebase for at hente quizdata.
+// Når dataene hentes, gemmes de i `data`, og vi bruger `update()` til at vise det visuelle .
+const getData = async () => { 
         await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
-        method: "GET"})
+        method: "GET"}) //hvilken aktion vi ber om af data
             .then((response) => {
-                return response.json()
+                return response.json() // konverter fetch til javascript kode
             })
             .then((result) => {
-                data = ref(result);
+                data = ref(result); // Gemmer hentet data i en ref
                 update(); 
                 
             })
             .catch((error) => {
-                console.error(error);
+                console.error(error); //Håndtere fejl
             });
         
     }
-
+// Kør `getData` for at hente quizdata, når app'en starter
     getData();
 
+
+//  Slide 3 Opdatering af data til databasen
+// `putDatabase()` sender data til Firebase og opdaterer quizzen.
+// Med `PUT`-anmodningen gemmes quizændringer, så de opdateres i databasen.
 let putDatabase =()=>{
     fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json", {
-        method: "PUT",
+        method: "PUT", // Sender en PUT-anmodning for at opdatere eksisterende data
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data.value), // Send `data.value` som ny værdi for at overskrive eksisterende data
+        body: JSON.stringify(data.value), // specificere hvad den skal put i databasen
     })
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("Data er blevet overskrevet:", result);
-            update(); // Opdater for at vise de nye data
+        .then(() => {
+            update(); 
         })
         .catch((error) => {
             console.error("Fejl ved overskrivning af data:", error);
-        })
-        .finally(() => {
-            update(); // Opdater for at vise de nye data uanset resultat
         });
 
 }
+
+// Denne funktion opdaterer det viste spørgsmål ved at ændre currentData baseret på det aktuelle spørgsmål.
 let update = () => {
-    currentData.value = {...data.value[currentQuestion].questions};
+    currentData.value = {...data.value[currentQuestion].questions}; //opdatere currentData med det man har valgt
 }
 
-//denne funktion gemmer dataen fra skemaet til databasen
+
+//Slide 2 Tilføjlse af spørgsmål
+// `saveQuestion()` giver brugeren mulighed for at oprette og gemme nye spørgsmål i quizzen.
 let saveQuestion = () => {
-    let answer = [];
-    if(parseInt(document.getElementById("listeType").value) != "2"){
+    let answer = []; //array for at gemme svarmuligheder
+
+    //tjekker om testtypen ikke er 2, ellers henter den svarmulighederne, begrund af tekst.
+    if(parseInt(document.getElementById("listeType").value) != 2){
+        //loop igennem svarmulighederne
         for(let i = 0; i < inputBoxes.value.length; i++){
-            answer.push(document.getElementById("inputbox"+i).value);
+            answer.push(document.getElementById("inputbox"+i).value); // for at brugeren kan vælge imellem flere inputboxe
         }
     }
-    console.log(answer);
+    
+    //opretter spørgsmål
     data.value.push({
             questions: {
-                question: document.getElementById("inputTitel").value,
-                type: parseInt(document.getElementById("listeType").value),
-                answers: [...answer]
+                question: document.getElementById("inputTitel").value, //henter spørgsmålet
+                type: parseInt(document.getElementById("listeType").value), //typen
+                answers: [...answer] //spreadoperator
             }
         });  
+        // sætter currentquestionn til det sidste spørgsmål
         currentQuestion = data.value.length-1;
-        console.log(data.value.questions);
+
+        //Dataen bliver sendt og opdateret til databasen 
         putDatabase();
         update(); 
 }
 
+// ref til svarmulighedernes inputbokse
 let inputBoxes = ref([]);
-
+// Funktionen `addQuestion()`  giver brugeren mulighed for at tilføje et nyt spørgsmål med inputfelter.
 let addQuestion = () => {
     currentData.value.type=3;
     currentData.value.question = "";
     addInputbox();
 };
-
+//tilføjer en ny inputboks til svar
 let addInputbox = () => {
     inputBoxes.value.push(`inputbox${inputBoxes.value.length}`);
 
 }
+//sletter input når man trykker på krydset
+let removeInput = (index) => {
+    for(let i = index;i<inputBoxes.value.length-1;i++){
+        document.getElementById("inputbox"+i).value = document.getElementById("inputbox"+(i+1)).value;
+    }
+    
+    inputBoxes.value.splice(inputBoxes.value.length-1, 1);
+
+    
+}
+//slide 3 
+//giver brugeren mulighed for at slette det aktuelle spørgsmål i quizzen.
+//Funktionen her tjekker først, om der er flere end ét spørgsmål i quizzen.
+//Hvis der er det fjerner vi spørgsmålet data.value ved hjælp af .splice
+
 
 let deleteQuestion = () => {
-    if (data.value.length > 1) { // Sørg for, at der er mindst ét spørgsmål tilbage
-        console.log(data.value[currentQuestion]);
-        data.value.splice(currentQuestion, 1);
-        currentQuestion = 0; 
-        putDatabase();
+    if (data.value.length > 1) { // Sørger for, at der er mindst ét spørgsmål tilbage
+
+        //Hvis der er flere end et spørgsmål
+        data.value.splice(currentQuestion, 1); //fjerner spørgsmål på nuverende sted
+        currentQuestion = 0; //nulstiller til første spørgsmål
+        putDatabase(); //opdatere til firebase
     } else {
         alert("Der skal være mindst ét spørgsmål tilbage!");
     }
     update(); 
 };
-
+//slide 4
+//Navigation af inputfelter
+//Funktion til at navigere til forrige spørgsmål 
 let previousQuestion = ()=>{
-    if(currentQuestion > 0){
-        currentQuestion-=1;
+    if(currentQuestion > 0){ //Tjekker placering for at vi ikke går længere tilbage
+        currentQuestion-=1; //går til forrige spørgsmål
         update(); 
     }
 }
+//funktionen til næste spørgsmål
 let nextQuestion = ()=>{
-    if(currentQuestion < data.value.length-1){
-        currentQuestion+=1;
+    if(currentQuestion < data.value.length-1){ //tjekker om vi er på sidste spørgsmål
+        currentQuestion+=1; //næste sprøgsmål
         update();
     }
 }
-
+// fortyd funktion
 let CancelEditing = () => {
-    currentQuestion = 0;
+    currentQuestion = 0; //sætter os til spørgsmål 1
   
     update();
 }
@@ -134,7 +169,7 @@ let CancelEditing = () => {
             <div v-else-if="currentData.type == 1" >
                 <div v-for="Opt in currentData.answers">
                     <div class="option">
-                        <input type="radio" :name="Opt" :value="Opt" :id="Opt">
+                        <input type="radio" name="optionss" :value="Opt" :id="Opt">
                         <label :for="Opt"> {{ Opt }}</label>
                     </div>
                 </div>
@@ -143,7 +178,8 @@ let CancelEditing = () => {
         
             <div v-else-if="currentData.type == 2" >
                 <div class="option">
-                    <input type=" text" id="textType2" class="inputText"/>
+                    <label for="textInput" style="width: 20%;">Svar:</label>
+                    <input name="textInput" type="text" id="textType2" class="inputText"/>
                 </div>  
             </div>
 
@@ -165,7 +201,8 @@ let CancelEditing = () => {
                 <div v-for="(input,index) in inputBoxes" class="option">
                     <label :for="input">Svar  {{ index+1 }}: </label>
                     <input type="text" :id="input" class="inputText"/>
-                    <button class="Cross" ><img src="../../assets/icons/CrossIcon.png" alt=""></button>
+                    <button class="Cross" v-on:click="(removeInput(index))" ><img src="../../assets/icons/CrossIcon.png" alt=""></button>
+                    
                 </div> 
             </div>
         </div>
@@ -175,7 +212,6 @@ let CancelEditing = () => {
         <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
         <button v-if="currentData.type != 3" v-on:click="addQuestion()"class="buttons">Tilføj Spørgsmål</button> 
         <button v-if="currentData.type != 3" v-on:click="deleteQuestion()"class="buttons">Slet Spørgsmål</button> 
-        <button v-if="currentData.type != 3" v-on:click="saveChanges()"class="buttons">Redigere spørgsmål</button> 
         <button v-if="currentData.type == 3" v-on:click="CancelEditing()" class="buttons">Annuler</button>
         <button v-if="currentData.type == 3" v-on:click="addInputbox()" class="buttons">Tilføj input</button>
         <button v-if="currentData.type == 3" v-on:click="saveQuestion()"class="buttons">Gem svar</button>
