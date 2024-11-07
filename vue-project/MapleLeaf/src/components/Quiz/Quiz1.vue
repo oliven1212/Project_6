@@ -7,7 +7,7 @@ let currentQuestion = 0; // Holder styr på hvilket spørgsmål vi er på
 let data; // henter fra Firebase
 let currentData = ref(""); // Ref til at holde det nuværende spørgsmål
 
-// Slide 1 - Hentning af quizdata
+// Hentning af quizdata
 // Funktionen `getData()` anvender en GET-anmodning til Firebase for at hente quizdata.
 // Når dataene hentes, gemmes de i `data`, og vi bruger `update()` til at vise det visuelle .
 const getData = async () => { 
@@ -30,7 +30,7 @@ const getData = async () => {
     getData();
 
 
-//  Slide 3 Opdatering af data til databasen
+//  Opdatering af data til databasen
 // `putDatabase()` sender data til Firebase og opdaterer quizzen.
 // Med `PUT`-anmodningen gemmes quizændringer, så de opdateres i databasen.
 let putDatabase =()=>{
@@ -56,7 +56,6 @@ let update = () => {
 }
 
 
-//Slide 2 Tilføjlse af spørgsmål
 // `saveQuestion()` giver brugeren mulighed for at oprette og gemme nye spørgsmål i quizzen.
 let saveQuestion = () => {
     let answer = []; //array for at gemme svarmuligheder
@@ -108,7 +107,7 @@ let removeInput = (index) => {
 
     
 }
-//slide 3 
+
 //giver brugeren mulighed for at slette det aktuelle spørgsmål i quizzen.
 //Funktionen her tjekker først, om der er flere end ét spørgsmål i quizzen.
 //Hvis der er det fjerner vi spørgsmålet data.value ved hjælp af .splice
@@ -126,7 +125,7 @@ let deleteQuestion = () => {
     }
     update(); 
 };
-//slide 4
+
 //Navigation af inputfelter
 //Funktion til at navigere til forrige spørgsmål 
 let previousQuestion = ()=>{
