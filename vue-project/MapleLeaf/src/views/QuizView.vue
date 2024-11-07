@@ -5,13 +5,7 @@
 </script>
 <template>
   <NavBar />
-  <br><hr><br>
-
   <Quiz0/>
-  <br><hr><br>
-
- 
-
  
 </template>
 
