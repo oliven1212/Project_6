@@ -71,6 +71,7 @@ let signIn = async () => {
     if (!isFirebaseInitialized.value) return;
     try {
         await signInWithEmailAndPassword(auth.value, emailInput.value, passwordInput.value);
+        runMessage();
     } catch (error) {
         console.log(error.message);
     }
@@ -140,8 +141,44 @@ let removeUser = () => {
 }
 
 let SaveMessage = () =>{
-    console.log(auth.value.currentUser.uid);
+    const message = prompt("Skriv en besked der skal kome når du logger ind");
+    fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/messages.json", {
+        method: "Post", 
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"userId":auth.value.currentUser.uid,"text":message}),
+    })
+        .then(() => {
+        })
+        .catch((error) => {
+            console.error("Fejl ved overskrivning af data:", error);
+        });
 }
+let runMessage = async () =>{
+    let messages = "";
+    await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/messages.json",{
+        method: "GET"})
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                Object.keys(result)
+                .map((key)=>{
+                    if(result[key].userId == auth.value.currentUser.uid){
+                        messages += result[key].text+"\n";
+                    }    
+                });
+                if(messages.length > 0){
+                        alert("Beskederne du har skrevet er: \n"+messages);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+}
+
 
 </script>
 
