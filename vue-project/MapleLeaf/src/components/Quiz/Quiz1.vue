@@ -9,16 +9,15 @@ let currentData = ref(""); // Ref til at holde det nuværende spørgsmål
 
 // Hentning af quizdata
 // Funktionen `getData()` anvender en GET-anmodning til Firebase for at hente quizdata.
-// Når dataene hentes, gemmes de i `data`, og vi bruger `update()` til at vise det visuelle .
 const getData = async () => { 
         await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
         method: "GET"}) //hvilken aktion vi ber om af data
-            .then((response) => {
-                return response.json() // konverter fetch til javascript kode
+            .then((response) => {// response = fetched data
+                return response.json(); // konverter response til javascript kode
             })
             .then((result) => {
                 data = ref(result); // Gemmer hentet data i en ref
-                update(); 
+                update(); //  til at vise det visuelle .
                 
             })
             .catch((error) => {
@@ -35,11 +34,11 @@ const getData = async () => {
 // Med `PUT`-anmodningen gemmes quizændringer, så de opdateres i databasen.
 let putDatabase =()=>{
     fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json", {
-        method: "PUT", // Sender en PUT-anmodning for at opdatere eksisterende data
+        method: "PUT", // Sender en PUT-anmodning for at overskrive eksisterende data
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data.value), // specificere hvad den skal put i databasen
+        body: JSON.stringify(data.value), // specificere hvad den skal sætte i databasen
     })
         .then(() => {
             update(); 
@@ -47,7 +46,6 @@ let putDatabase =()=>{
         .catch((error) => {
             console.error("Fejl ved overskrivning af data:", error);
         });
-
 }
 
 // Denne funktion opdaterer det viste spørgsmål ved at ændre currentData baseret på det aktuelle spørgsmål.
@@ -60,7 +58,7 @@ let update = () => {
 let saveQuestion = () => {
     let answer = []; //array for at gemme svarmuligheder
 
-    //tjekker om testtypen ikke er 2, ellers henter den svarmulighederne, begrund af tekst.
+    //I tilfaldet at det er 2 vil vi ikke tilfoje answer, da man ikke kan give svar mulighed til den. 
     if(parseInt(document.getElementById("listeType").value) != 2){
         //loop igennem svarmulighederne
         for(let i = 0; i < inputBoxes.value.length; i++){
@@ -68,7 +66,7 @@ let saveQuestion = () => {
         }
     }
     
-    //opretter spørgsmål
+    //tilføjer sporgsmål til data
     data.value.push({
             questions: {
                 question: document.getElementById("inputTitel").value, //henter spørgsmålet
@@ -80,7 +78,7 @@ let saveQuestion = () => {
         currentQuestion = data.value.length-1;
 
         //Dataen bliver sendt og opdateret til databasen 
-        putDatabase();
+        putDatabase();  //linje 35
         update(); 
 }
 
