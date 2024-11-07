@@ -1,7 +1,7 @@
 <script setup>
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword, signOut, onAuthStateChanged,updateProfile,deleteUser  } from "firebase/auth";
+import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword, signOut, onAuthStateChanged,updateProfile,deleteUser, getIdToken  } from "firebase/auth";
 import { ref,onMounted } from 'vue';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -139,6 +139,10 @@ let removeUser = () => {
     }
 }
 
+let SaveMessage = () =>{
+    console.log(auth.value.currentUser.uid);
+}
+
 </script>
 
 <template >
@@ -165,8 +169,9 @@ let removeUser = () => {
         <button v-if="LogInOut" v-on:click="changeLogInOption()">Bliv medlem</button>
         <button v-else v-on:click="changeLogInOption()">Gå til Log ind</button>
         <button v-on:click="logOut()">Log ud</button>
-        <button v-on:click="updateUsername()">Tilføj brugernavn</button>
         <button v-on:click="logUser()">Hvem er jeg?</button>
+        <button v-on:click="updateUsername()">Tilføj brugernavn</button>
+        <button v-on:click="SaveMessage()">Gem en besked</button>
         <button v-on:click="removeUser()">Fjern mig permanent</button>
     </div>
 </template>
