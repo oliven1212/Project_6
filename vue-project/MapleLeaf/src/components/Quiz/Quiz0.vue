@@ -67,7 +67,11 @@ const getData = async () => {
     console.error(error);
   }
 };
-//update variable function der indeholder en if statement hvis quizQuestion har en værdi og hvis quiz questions værdi indeholder attribute eller index der er tilsvarende til hvad variablen currentquestion indeholder
+//update variable function der indeholder en if statement hvis quizQuestion har en værdi og
+// hvis quiz questions værdi indeholder attribute eller index der er tilsvarende til hvad variablen currentquestion indeholder
+//så hvis quizQuestion indeholder en værdi og der findes en værdi for hvilket spørgsmål vi er på kører koden
+//variablen currentdata laver en spread syntax der tager en kopi af attributterne og ligger dem i et nyt object
+//og ligger dem i et nyt objekt og opretter en kopi af question objektet
 const update = () => {
   if (quizQuestion.value && quizQuestion.value[currentQuestion]) {
     currentData.value = { ...quizQuestion.value[currentQuestion].questions };
@@ -85,23 +89,30 @@ onMounted(() => {
 
 let quizQuestion = ref([]);
 let userAnswers=ref([]);
-let prompts = ref([]); // store prompts for hver spørgsmål
-let recommendations = ref([]); // udskriver alle anbefalingerne
-
+// let prompts = ref([]); // store prompts for hver spørgsmål
+// let recommendations = ref([]); // udskriver alle anbefalingerne
+// functionen SaveUserAnswer med parameteren værdi if statement hvis currentdata værdi og type er = 0 og er af sammedatatype
 function saveUserAnswer(value) {
   if (currentData.value.type === 0) {
     // Checkbox svar - tillader flere valg
+    //den type knap har flere svar muligheder variablen index har værdien med javascript metoden til indexof med parameteren værdi
+    //så den finder den index af værdi
+    //hvis index er number data og har værdien -1 
+    //skubbe en værdi ind i brugersvaret
+    // hvis den ikke har den værdi sletter den hvad der er på pladsen
     const index = userAnswers.value.indexOf(value);
     if (index === -1) {
       userAnswers.value.push(value);
     } else {
       userAnswers.value.splice(index, 1);
     }
+    //hvis den har værdien 1 gemmer den brugerens data der er value ind i en array
     console.log("Checkbox svar opdateret:", userAnswers.value);
   } else if (currentData.value.type === 1) {
     // Radio svar - kun ét valg muligt
     userAnswers.value = [value];
     console.log("Radio svar valgt:", userAnswers.value);
+    //den sidste er med 2 textype i stedet men gør det samme som 1
   } else if (currentData.value.type === 2) {
     // Tekstinput svar - lagrer som en enkelt tekststreng
     userAnswers.value = [value];
@@ -117,8 +128,11 @@ function createPrompt() {
     // Add answer based on the question type
     if (currentData.value.type === 0) {
         // Checkbox: list all selected answers
+        //currentdata er en liste answer en function som tjekker om værdien bruger data findes i useranswer hvis der er answer i useranswer
         const selectedOptions = currentData.value.answers.filter(answer => userAnswers.value.includes(answer));
+        //adder svar til prompttext .join metode bruges til at adskille de svar med komma der bliver lagt ind i prompttext
         promptText += selectedOptions.join(", ");
+
     } else if (currentData.value.type === 1) {
         // Radio: single selection
         promptText += userAnswers.value[0];
@@ -143,22 +157,24 @@ const generateRecommendations = async () => {
     }
     
     // Clear previous recommendations to avoid duplicates
-    recommendations.value = [];
+    // recommendations.value = [];
     
     {
         try {
+          //variabel som indeholder AI i model med metoden og og indeholder værdierne string prompt
           const result = await model.generateContent(prompt);
-console.log(prompt);
-const response = result.response;
-responseText = ref(response.text());  // Adjust if `result.text` directly contains the output
-            console.log(responseText);
-            recommendations.value.push(responseText);
+          console.log(prompt);
+          const response = result.response;
+//bruges til at oprett en reaktiv reference response indeholder en text metode som retunerer texten fra svaret
+          responseText = ref(response.text());  
+          console.log(responseText);
+            // recommendations.value.push(responseText);
         } catch (error) {
             console.error("Error generating content:", error);
         }
     }
 
-    console.log("Recommendations generated:", recommendations.value);
+    // console.log("Recommendations generated:", recommendations.value);
     
 };
 let previousQuestion = ()=>{
@@ -225,8 +241,7 @@ let nextQuestion = () => {
   </div>    
 </div>
 <div v-if="quizQuestion" id="navigation">
-    <button @click="saveprompt()" class="buttons"> Næste </button>
-    <button @click="generateRecommendations()" class="buttons">hvis Anbefalinger</button>
+    <button @click="generateRecommendations()" class="buttons">Vis Anbefalinger</button>
     <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
     <button v-if="currentData.type != 3" v-on:click="nextQuestion()"class="buttons">Næste</button>
 
