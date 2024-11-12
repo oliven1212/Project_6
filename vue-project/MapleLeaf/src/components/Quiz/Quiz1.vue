@@ -8,8 +8,7 @@ let data; // henter fra Firebase
 let currentData = ref(""); // Ref til at holde det nuværende spørgsmål
 
 // Hentning af quizdata
-// Funktionen `getData()` anvender en GET-anmodning til Firebase for at hente quizdata.
-const getData = async () => { 
+const getData = async () => { //arrowfunction
         await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/QuizLayout.json",{
         method: "GET"}) //hvilken aktion vi ber om af data
             .then((response) => {// response = fetched data
@@ -58,7 +57,7 @@ let update = () => {
 let saveQuestion = () => {
     let answer = []; //array for at gemme svarmuligheder
 
-    //I tilfaldet at det er 2 vil vi ikke tilfoje answer, da man ikke kan give svar mulighed til den. 
+    //I tilfaldet at det er 2 vil vi ikke tilføje answer, da man ikke kan give svar mulighed til den. 
     if(parseInt(document.getElementById("listeType").value) != 2){
         //loop igennem svarmulighederne
         for(let i = 0; i < inputBoxes.value.length; i++){
@@ -67,7 +66,7 @@ let saveQuestion = () => {
     }
     
     //tilføjer sporgsmål til data
-    data.value.push({
+    data.value.push({ //tilføjer til array/object
             questions: {
                 question: document.getElementById("inputTitel").value, //henter spørgsmålet
                 type: parseInt(document.getElementById("listeType").value), //typen
@@ -78,7 +77,7 @@ let saveQuestion = () => {
         currentQuestion = data.value.length-1;
 
         //Dataen bliver sendt og opdateret til databasen 
-        putDatabase();  //linje 35
+        putDatabase();  
         update(); 
 }
 
@@ -101,15 +100,12 @@ let removeInput = (index) => {
         document.getElementById("inputbox"+i).value = document.getElementById("inputbox"+(i+1)).value;
     }
     
-    inputBoxes.value.splice(inputBoxes.value.length-1, 1);
+    inputBoxes.value.splice(inputBoxes.value.length-1, 1); //forkorter et sepcifik elememt
 
     
 }
 
 //giver brugeren mulighed for at slette det aktuelle spørgsmål i quizzen.
-//Funktionen her tjekker først, om der er flere end ét spørgsmål i quizzen.
-//Hvis der er det fjerner vi spørgsmålet data.value ved hjælp af .splice
-
 
 let deleteQuestion = () => {
     if (data.value.length > 1) { // Sørger for, at der er mindst ét spørgsmål tilbage
