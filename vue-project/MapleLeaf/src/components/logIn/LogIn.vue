@@ -46,7 +46,7 @@ let signUp = async () => {
         alert("skriv et gyldigt password");
         return;
     }else if(auth.value.currentUser != null){
-        alert(`Du er allerede logget ind som ${auth.value.currentUser.email}`)
+        alert(`Du er allerede logget ind som ${auth.value.currentUser.email}`);
         return;
     }
 
