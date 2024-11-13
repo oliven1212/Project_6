@@ -42,7 +42,7 @@
 
 <style scoped>
     header{
-        background-color: #EEEEEE;
+        background-color: #ffffff;
         height: auto;
         overflow: hidden;
         display: flex;

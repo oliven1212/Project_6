@@ -5,7 +5,7 @@
 <template>
     <div id="artikler">
         <div class="artikel">
-            <img src="../assets/Artikel0.png" alt="">
+            <img src="../../assets/Artikel0.png" alt="">
             <h2>
                 VIDEN OM VITAMINER
             </h2>
@@ -17,7 +17,7 @@
             </p>
         </div>
         <div class="artikel">
-            <img src="../assets/Artikel1.png" alt="">
+            <img src="../../assets/Artikel1.png" alt="">
             <h2>
                 VIDEN OM VITAMINER
             </h2>

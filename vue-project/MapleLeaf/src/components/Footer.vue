@@ -9,13 +9,7 @@
             <p>Telefon: 42 06 94 20</p>
             <p style="display: inline-block;">Email: </p><a href="./" style="margin-left: 10px;">info@mapletree.com</a>
         </div>
-        <div class="line"></div>
-        <div>
-            <h2>Find os på</h2>
-            <p>facebookLOGO</p>
-            <p>InstagramLogo</p>
-            <p>linkInLOGO</p>
-        </div>
+
         <div class="line"></div>
         <div>
             <h2>Maple Tree</h2>
@@ -42,7 +36,7 @@
         align-items: center;
         background-color: #FFF8EC;
         height: 220px;
-        padding: 0px 3%;
+        padding: 0px 5%;
     }
     .line{
         border-color: #4D4D4D;

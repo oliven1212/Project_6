@@ -1,9 +1,11 @@
 <script setup>
 import NavBar from '../components/Header.vue';
-import FrontPageTop from '../components/FrontPageTop.vue';
-import Banner from '../components/Banner.vue';
-import Artikler from '../components/Artikler.vue';
 import FootBar from '@/components/Footer.vue';
+import FrontPageTop from '../components/FrontPage/FrontPageTop.vue';
+import Banner from '../components/FrontPage/Banner.vue';
+import Artikler from '../components/FrontPage/Artikler.vue';
+import ChildVitamin from '@/components/FrontPage/ChildVitamin.vue';
+import VoresVitaminer from '@/components/FrontPage/VoresVitaminer.vue';
 
 </script>
 
@@ -13,8 +15,10 @@ import FootBar from '@/components/Footer.vue';
 
     <FrontPageTop />
     <Banner />
+    <VoresVitaminer />
+    <ChildVitamin />
     <Artikler />
-    <FootBar />
     
+    <FootBar />
   </main>
 </template>
