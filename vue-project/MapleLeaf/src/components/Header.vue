@@ -12,13 +12,13 @@
                 <img src="../assets/icons/homeIcon.png" alt="">
                 <h3>Home</h3>
             </a>
-            <a href="./Quiz">
+            <a href="./">
                 <img src="../assets/icons/PillIcon.png" alt="">
-                <h3>Pille Guiden</h3>
+                <h3>Vitaminer</h3>
             </a>
             <a href="./adminQuiz">
                 <img src="../assets/icons/PillIcon.png" alt="">
-                <h3>Edit Pille Guiden</h3>
+                <h3>Rediger Guiden</h3>
             </a>
             <a href="./">
                 <img src="../assets/icons/GoogleMapLogo.png" alt="">

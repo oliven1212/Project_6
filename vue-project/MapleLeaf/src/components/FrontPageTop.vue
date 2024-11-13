@@ -9,7 +9,7 @@
     <div>
       <h1>Maple Leaf</h1>
       <p>Din vej til et sundere liv med naturlige vitaminer og kosttilskud, skræddersyet til dine behov.</p>
-      <a href="google.com">CallToActionText</a>
+      <a href="./quiz">Prøv vitamin guiden</a>
     </div>
   </div>
 </template>
