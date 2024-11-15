@@ -12,7 +12,7 @@ let firebaseConfig;
 let auth;
 let vertexAI;
 let model;
-let currentQuestion = 0;
+let currentQuestion = ref(0);
 // ref er for at tilgå HTML elementer i stedet for at bruge getElementbyId så variablen currentData ref til et object der indeholde type null og et array
 let currentData = ref({ type: null, answers: [] });
 //prompt text baseret hardcoded til at prompte AI'en initializere variable
@@ -45,7 +45,9 @@ const initializeFirebase = async () => {
     vertexAI = getVertexAI(app);
     //sætter functionen hvilken model af vertexAI med parameter Ai og hvilken udgaver den tager ind som parameter.
     //systeminstruktioner er indbygget funktion til at prombt hvilken character den skal spille.
-    model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash", systemInstruction: `"Du er en specialiseret sundhedsassistent, der fokuserer på opdateret og evidensbaseret information om vitaminer og kosttilskud. Dit mål er at levere en liste og beskrivelse af vitaminer og kosttilskud, der kun anvender data fra pålidelige kilder indsamlet efter [sæt en ønsket dato, f.eks. 2022]. Brug anerkendte og videnskabelige ressourcer som sundhedsmyndigheder, forskningsstudier og kliniske retningslinjer, især fra europæiske og amerikanske sundhedsmyndigheder, hvis muligt
+    model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash", systemInstruction: `"Du er en specialiseret sundhedsassistent, der fokuserer på opdateret og evidensbaseret information om vitaminer og kosttilskud.
+     Dit mål er at levere en liste og beskrivelse af vitaminer og kosttilskud, der kun anvender data fra pålidelige kilder indsamlet efter [sæt en ønsket dato, f.eks. 2022]. Brug anerkendte og videnskabelige ressourcer som sundhedsmyndigheder, 
+     forskningsstudier og kliniske retningslinjer, især fra europæiske og amerikanske sundhedsmyndigheder, hvis muligt
 
 Ved hver beskrivelse skal du opdele informationen i følgende kategorier
 
@@ -73,10 +75,10 @@ const getData = async () => {
 //variablen currentdata laver en spread syntax der tager en kopi af attributterne og ligger dem i et nyt object
 //og ligger dem i et nyt objekt og opretter en kopi af question objektet
 const update = () => {
-  if (quizQuestion.value && quizQuestion.value[currentQuestion]) {
-    currentData.value = { ...quizQuestion.value[currentQuestion].questions };
+  if (quizQuestion.value && quizQuestion.value[currentQuestion.value]) {
+    currentData.value = { ...quizQuestion.value[currentQuestion.value].questions };
   } else {
-    console.warn("Ingen spørgsmål fundet for currentQuestion:", currentQuestion);
+    console.warn("Ingen spørgsmål fundet for currentQuestion:", currentQuestion.value);
     currentData.value = { type: null, answers: [] }; // fallback hvis spørgsmål ikke findes
   }
 };
@@ -119,7 +121,7 @@ function saveUserAnswer(value) {
     console.log("Tekstinput svar:", userAnswers.value[0]);
   }
 }
-console.log(saveUserAnswer)
+console.log(saveUserAnswer);
     
 
 function createPrompt() {
@@ -168,6 +170,7 @@ const generateRecommendations = async () => {
 //bruges til at oprett en reaktiv reference response indeholder en text metode som retunerer texten fra svaret
           responseText = ref(response.text());  
           console.log(responseText);
+          update();
             // recommendations.value.push(responseText);
         } catch (error) {
             console.error("Error generating content:", error);
@@ -178,15 +181,15 @@ const generateRecommendations = async () => {
     
 };
 let previousQuestion = ()=>{
-    if(currentQuestion > 0){
-        currentQuestion-=1;
+    if(currentQuestion.value > 0){
+        currentQuestion.value-=1;
         update(); 
     }
 }
 let nextQuestion = () => {
     savePrompt();  // Save current prompt before moving to the next question
-    if (currentQuestion < quizQuestion.value.length - 1) {
-        currentQuestion += 1;
+    if (currentQuestion.value < quizQuestion.value.length - 1) {
+        currentQuestion.value += 1;
         update();
     }
 };
@@ -195,127 +198,183 @@ let nextQuestion = () => {
 
 <template>
   <!--v-if er conditonal rendering er hvor et HTML element bliver lavet men kun din kondition er true-->
-    <div v-if="!responseText">
+  <div v-if="!responseText">
     <div class="QuizBox" v-if="quizQuestion">
-  <h1>{{ currentData.question }}</h1>
-  <div id="options">
-    <!-- Checkbox-options -->
-    <div v-if="currentData.type === 0">
-      <!-- v-for gør det muligt at opdatere og vise de HTML elementer med det samme når nye elementer bliver tilføjet til Arrayet-->
-      <div v-for="(Opt, index) in currentData.answers" :key="index" class="option">
-        <input 
-          type="checkbox" 
-          name="optionss"
-          :id="Opt" 
-          :value="Opt"
-          :checked="userAnswers.includes(Opt)"
-          @change="saveUserAnswer(Opt)">
-        <label :for="Opt">{{ Opt }}</label>
+      <h1>{{ currentData.question }}</h1>
+      <div id="options">
+        <!-- Checkbox-options -->
+        <div v-if="currentData.type === 0">
+          <!-- v-for gør det muligt at opdatere og vise de HTML elementer med det samme når nye elementer bliver tilføjet til Arrayet-->
+          <div v-for="(Opt, index) in currentData.answers" :key="index" class="option">
+            <input 
+              type="checkbox" 
+              name="optionss"
+              :id="Opt" 
+              :value="Opt"
+              :checked="userAnswers.includes(Opt)"
+              @change="saveUserAnswer(Opt)">
+            <label :for="Opt">{{ Opt }}</label>
+          </div>
+        </div>
+
+        <!-- Radio-options -->
+        <div v-if="currentData.type === 1">
+          <div v-for="(Opt, index) in currentData.answers" :key="index" class="option">
+            <input 
+              type="radio" 
+              name="Optionss" 
+              :value="Opt" 
+              :id="Opt"
+              :checked="userAnswers.includes(Opt)" 
+              @change="saveUserAnswer(Opt)">
+            <label :for="Opt">{{ Opt }}</label>
+          </div>
+        </div>
+
+        <!-- Text-input -->
+        <div v-if="currentData.type == 2">
+          <div class="option">
+            <label for="options" style="width: 100px;">Skriv svar:</label>
+            <input 
+              type="text" 
+              name="optionss"
+              class="inputText" 
+              @input="saveUserAnswer($event.target.value)">
+          </div>  
+        </div>
+      </div>   
+      <div id="navigation">
+        <button v-if="currentQuestion > 0" v-on:click="previousQuestion()" class="buttons"><img src="../../assets/icons/ArrowIcon.png" alt="" style="transform: scaleX(-1); margin-left: 0px;"><p>Forrige</p></button>
+        <button v-if="currentQuestion >= quizQuestion.length-1" v-on:click="generateRecommendations()" class="buttons"><p>Vis Anbefalinger</p></button>
+        <button v-if="currentQuestion > 0" v-on:click="nextQuestion()"class="buttons"><p>Næste</p> <img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
+        <button v-else v-on:click="nextQuestion()"class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
+      </div>
+      <div class="progressBar">
+        <div  v-for="(,index) in quizQuestion">
+          <span class="dot" v-if="currentQuestion<index"></span>
+          <span class="dotFill" v-else ></span>
+        </div>
       </div>
     </div>
-
-    <!-- Radio-options -->
-    <div v-if="currentData.type === 1">
-      <div v-for="(Opt, index) in currentData.answers" :key="index" class="option">
-        <input 
-          type="radio" 
-          name="Optionss" 
-          :value="Opt" 
-          :id="Opt"
-          :checked="userAnswers.includes(Opt)" 
-          @change="saveUserAnswer(Opt)">
-        <label :for="Opt">{{ Opt }}</label>
-      </div>
-    </div>
-
-    <!-- Text-input -->
-    <div v-if="currentData.type == 2">
-      <div class="option">
-        <input 
-          type="text" 
-          :id="textType2" 
-          class="inputText" 
-          @input="saveUserAnswer($event.target.value)">
-      </div>  
-    </div>
-  </div>    
-</div>
-<div v-if="quizQuestion" id="navigation">
-    <button @click="generateRecommendations()" class="buttons">Vis Anbefalinger</button>
-    <button v-if="currentData.type != 3" v-on:click="previousQuestion()" class="buttons">Forrige</button>
-    <button v-if="currentData.type != 3" v-on:click="nextQuestion()"class="buttons">Næste</button>
-
-    </div>
+    
   </div> 
-    <div>
-      <pre>{{ responseText}}</pre >
-    </div>
+  <div v-if="responseText">
+    <pre>{{ responseText}}</pre >
+  </div>
            
 </template>
 
 <style scoped>
-.QuizBox{
-    display: block;
-    width: 100%;
-    margin: auto;
-
-  }
-  .QuizBox h1{
-      margin:auto;
-      margin-top: 50px;
-      width: 50%;
-  }
-  .option{
-      border-style:solid;
-      border-radius: 10px;
-      border-width: 2px;
-      width: 40%;
-      height: 100%;
-      margin: 15px auto;
-      padding: 10px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-  }
-  label{
-      margin-left: 22px;
-      margin-right: 10px;
-      width: 100%;
-
-  }
-  #navigation{
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin: 50px 10%;
-      
-  }
- .buttons{
-      width: 150px;
-      height: 75px;
-      border-radius: 20px;
-      border-style: solid;
-      border-width: 2px;
-      border-color: black;
-      background-color: lightgrey;    
-  }
-  .inputText{
-    width: 70%;
-    margin: auto;
-  }
-
+#navigation button{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#navigation button img,#navigation button p{
+  display: inline-block;
+}
+#navigation button img{
+  height: 30px;
+  margin: 5px;
   
-  select{
-    width: 70%;
+}
+
+.progressBar{
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content:center;
+  margin: 0px auto;
+}
+.dot,.dotFill{
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-style: solid;
+  border-color: gray;
+  border-width: 2px;
+  border-radius: 50%;
+  margin: 3px;
+}
+.dotFill{
+  background-color: #FFAC00;
+}
+.QuizBox{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+  height: 80vh;
   }
-  .Cross {
-    width: 30px;
-    margin-left: 10px;
-    background-color: rgb(255, 165, 165);
-    border-width: 1px;
-  } 
-  .Cross img {
-    width: 100%;
-  }
+.QuizBox h1{
+  margin: 0 auto;
+  margin-top: 50px;
+  width: 50%;
+}
+#options{
+  margin: auto 0px;
+}
+.option{
+  border-style:solid;
+  border-radius: 10px;
+  border-width: 2px;
+  width: 40%;
+  height: 100%;
+  margin: 15px auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+label{
+  margin-left: 22px;
+  margin-right: 10px;
+  width: 100%;
+
+}
+#navigation{
+  margin-top: auto;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 50px 10%;
+}
+.buttons{
+  width: auto;
+  padding: 0px 10px;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  background-color: rgb(244, 244, 244);    
+}
+.buttons:hover{
+  background-color: #bebebe;
+}
+.inputText{
+  width: 70%;
+  border-width: 2px;
+  border-color: #9f9f9f;
+  border-style:groove;
+  margin: auto;
+}
+
+
+select{
+  width: 70%;
+}
+.Cross {
+  width: 30px;
+  margin-left: 10px;
+  background-color: rgb(255, 165, 165);
+  border-width: 1px;
+} 
+.Cross img {
+  width: 100%;
+}
 
 </style>

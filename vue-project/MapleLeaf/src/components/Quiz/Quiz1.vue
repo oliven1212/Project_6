@@ -219,7 +219,6 @@ let CancelEditing = () => {
     display: block;
     width: 100%;
     margin: auto;
-
   }
   .QuizBox h1{
       margin:auto;
