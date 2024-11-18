@@ -22,59 +22,97 @@ import BadgeSun from "../../assets/icons/BadgeSun.png";
 
 let showVitamins = ref(true);
 let ChildVitamins = ref([
-    {type:"D", badges:[BadgeSun,BadgeBone],img: DVit,fullName:true},
-    {type:"C", badges:[BadgeShield,BadgeEnergy],img:CVit,fullName:true},
-    {type:"Calcium", badges:[BadgeBone,BadgeHeart],img: CalciumVit,fullName:false},
-    {type:"Magnesium", badges:[BadgeStrength,BadgeSleep],img: MagnesiumVit,fullName:false},
-    {type:"Jern", badges:[BadgeBlood,BadgeEnergy],img: JernVit,fullName:false},
-    {type:"Multi", badges:[BadgeHappy,BadgeMulti],img: MultiVit,fullName:true}
+    {type:"D", badges:[BadgeSun,BadgeBone],img: DVit,fullName:true,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"C", badges:[BadgeShield,BadgeEnergy],img:CVit,fullName:true,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Calcium", badges:[BadgeBone,BadgeHeart],img: CalciumVit,fullName:false,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Magnesium", badges:[BadgeStrength,BadgeSleep],img: MagnesiumVit,fullName:false,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Jern", badges:[BadgeBlood,BadgeEnergy],img: JernVit,fullName:false,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Multi", badges:[BadgeHappy,BadgeMulti],img: MultiVit,fullName:true,effects:["",""], desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"}
 
 ]);
+const effectList = {
+    hud: "",
+
+};
+let selectedVitamin = ref(ChildVitamins.value[0]);
+
+let updateVitamin = (index) =>{
+    selectedVitamin = ref(ChildVitamins.value[index]);
+    showVitamins.value = false;
+}
 </script>
 
 
 <template>
-    <button v-on:click="showVitamins = !showVitamins;">
-        <p v-if="!showVitamins">Show</p>
-        <p v-else>Hide</p>
-    </button>
-    <div class="vitamins" v-if="showVitamins">
+    <div class="general" v-if="showVitamins">
         <div class="generalInformation">
-
-        </div>
-
-        <div class="vitamin" v-for="vitamin in ChildVitamins">
-            <h2 v-if="vitamin.fullName">{{vitamin.type}}-Vitamin</h2>
-            <h2 v-else>{{vitamin.type}}</h2>
-            <img :src="vitamin.img" alt="">
-            <div class="badges">
-                <img :src="vitamin.badges[0]" alt="">
-                <img :src="vitamin.badges[1]" alt="">
+            <div>
+                <h1>Børnevitaminer</h1>
+                <p>Det kan være en udfordring for børn at få tilstrækkeligt med vitaminer og mineraler gennem deres kost.
+                    <br><br>
+                    Børnevitaminer kan derfor være en nyttig løsning for at sikre, at dit barn får de essentielle næringsstoffer til vækst og udvikling. 
+                    <br><br>
+                    Opdag vores børnevitaminer, der støtter dit barns sundhed og velvære.
+                </p>
             </div>
-            <a href=""><p>Læs mere</p></a>
+            <img src="../../assets/RotatedPills.png" alt="">
         </div>
+        <div class="vitamins">
+            <div class="vitamin" v-for="(vitamin,index) in ChildVitamins">
+                <h2 v-if="vitamin.fullName">{{vitamin.type}}-Vitamin</h2>
+                <h2 v-else>{{vitamin.type}}</h2>
+                <img :src="vitamin.img" alt="">
+                <div class="badges">
+                    <img :src="vitamin.badges[0]" alt="">
+                    <img :src="vitamin.badges[1]" alt="">
+                </div>
+                <button v-on:click="updateVitamin(index)"><p>Læs mere</p></button>
+            </div>
+        </div>
+        <img src="../../assets/ChildCornerSquares.png" alt="" style="width: 100%;">
     </div>
     <div class="showVitamin" v-if="!showVitamins">
         <div class="information">
+            <button v-on:click="showVitamins = !showVitamins;">
+                <p v-if="!showVitamins">Show</p> 
+                <p v-else>Hide</p>
+            </button>
             <div>
-                <h1>fancy text</h1>
-                <p>alot of fancy textalot of fancy textalot of fancy textalot of fancy textalot of fancy text</p>
+                <h2 v-if="selectedVitamin.fullName">{{selectedVitamin.type}}-Vitamin</h2>
+                <h2 v-else>{{selectedVitamin.type}}</h2>
+                <p>{{ selectedVitamin.desc }}</p>
             </div>
             <img src="../../assets/MomAndChild.png" alt="">
         </div>
         <div class="infograph">
-
+            
         </div>
     </div>
-
 
 </template>
 
 
 <style scoped>
+
 .generalInformation{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
-    background-image: url("");
+    background-image: url("../../assets/BackgroundForest.png");
+}
+.generalInformation div{
+    display: block;
+    background-color: #fef1d5bf;
+    width: 55%;
+    margin-right: 5%;
+    padding: 30px;
+}
+.generalInformation img{
+    width: 40%
+}
+.generalInformation div p{
+    margin-left: 10px;
 }
 .showVitamin{
 
@@ -132,19 +170,19 @@ justify-content:center;
     width: 15%;
     margin: auto 10px;
 }
-.vitamin a{
-    text-decoration: none;
+.vitamin button{
     background-color: #FFAC00;
-    width: 50%;
+    width: 40%;
     padding: 5px 0px;
     margin: 10px auto;
     text-align: center;
     border-radius: 15px;
+    border: none;
 }
-.vitamin a p{
+.vitamin button p{
     color: white;
 }
-.vitamin a:hover{
+.vitamin button:hover{
     background-color: #ad7400;
 }
 </style>

@@ -2,6 +2,7 @@
 </script>
 
 <template>
+    <h1>Vores vitaminer</h1>
     <div class="Items">
         <div class="Item">
             <div style="background-color: #E6FFD6;">
@@ -34,8 +35,13 @@
 </template>
 
 <style scoped>
+h1{
+    margin: 0px 2%;
+    margin-top: 25px;
+}
 .Items{
     margin: 40px 2%;
+    margin-top: 15px;
     display: flex;
     justify-content: space-evenly;
     overflow: hidden;
@@ -44,6 +50,7 @@
 .Item{
     display: flex;
     flex-direction: column;
+    margin:2px;
 }
 .Item div{
     flex: 1;

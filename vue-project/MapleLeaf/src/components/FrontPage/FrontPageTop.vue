@@ -4,7 +4,7 @@
 
 <template>
   <div id="front">
-    <video src="../../assets/videofront.mp4" autoplay muted loop></video>
+    <video src="../../assets/Reklame.mp4" autoplay muted loop></video>
     <img src="../../assets/bannerOverlay.png" alt="">
     <div>
       <h1>Maple Leaf</h1>
@@ -23,22 +23,22 @@
   }
   #front video {
   display: block;
-  width: 63%;
-  position: relative;
+  width: 56.5%;
+  position: absolute;
   z-index: 1;
-  top: -6%;
-  left: 37%;
+  top: 4.3%;
+  left: 41%;
   margin-top: 6%;
   margin-bottom: 8%;
   }
   #front img{
   display: block;
   width: 100%;
-  position: absolute;
+  position: relative;
   z-index: 2;
   top: 0px;
   left: 0px;
-  height: 100%;
+  
   }
   #front div{
     display: flex;

@@ -7,11 +7,11 @@
         <img src="../../assets/circleLogo.png" alt="">
         <h3>Maple Leaf produkter <br>kan også købes online på:</h3>
         <div class="linkList">
-            <a href=""><img src="../../assets/ApoProDK.png" alt="ApoPro.dk"></a>
-            <a href=""><img src="../../assets/WebApoteketDK.png" alt=""></a>
-            <a href=""><img src="../../assets/dinApoteker.png" alt=""></a>
-            <a href=""><img src="../../assets/ApotekerenDK.png" alt=""></a>
-            <a href=""><img src="../../assets/ApoteketOnlineDK.png" alt=""></a>
+            <a href="https://apopro.dk/"><img src="../../assets/ApoProDK.png" alt="ApoPro.dk"></a>
+            <a href="https://www.webapoteket.dk/"><img src="../../assets/WebApoteketDK.png" alt=""></a>
+            <a href="https://www.dinapoteker.dk/"><img src="../../assets/dinApoteker.png" alt=""></a>
+            <a href="https://www.apotekeren.dk/"><img src="../../assets/ApotekerenDK.png" alt=""></a>
+            <a href="https://apoteket-online.dk/"><img src="../../assets/ApoteketOnlineDK.png" alt=""></a>
         </div>
     </div>
 </template>
@@ -44,9 +44,10 @@
 #banner a img{
     height: 25px;
 }
-#banner a{
+#banner .linkList a{
     background-color: #ffffff;
     padding: 0px 12px;
     border-radius: 30px;
+    margin: 10px;
 }
 </style>
