@@ -8,25 +8,13 @@
             <img src="../assets/Logo.png" alt="">
         </a>
         <div id="headerItems">
-            <a href="./">
-                <img src="../assets/icons/homeIcon.png" alt="">
-                <h3>Home</h3>
+            <a href="./quiz">
+                <img src="../assets/icons/QuizIcon.png" alt="">
+                <h3>Vitamin Guiden</h3>
             </a>
-            <a href="./">
+            <a href="./childvitamins">
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Vitaminer</h3>
-            </a>
-            <a href="./adminQuiz">
-                <img src="../assets/icons/PillIcon.png" alt="">
-                <h3>Rediger Guiden</h3>
-            </a>
-            <a href="./">
-                <img src="../assets/icons/GoogleMapLogo.png" alt="">
-                <h3>Find apotek</h3>
-            </a>
-            <a href="./">
-                <img src="../assets/icons/HeadsetIcon.png" alt="">
-                <h3>Kontakt os</h3>
             </a>
             <a href="./LogInd">
                 <img src="../assets//icons/UserIcon.png" alt="">
@@ -61,7 +49,7 @@
         flex-direction: row;
         margin: 20px 0px;
         margin-left: auto;
-        width: 70%;
+        width: 45%;
     }
     #headerItems a{
         display: flex;

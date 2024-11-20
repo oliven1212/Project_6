@@ -62,5 +62,6 @@
     border-radius: 20px;
     background-color: #FFAC00;
     text-decoration: none;
+    color: white;
   }
 </style>
