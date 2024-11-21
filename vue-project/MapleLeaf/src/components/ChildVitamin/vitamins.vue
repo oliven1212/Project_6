@@ -19,21 +19,27 @@ import BadgeStrength from "../../assets/icons/BadgeStrength.png";
 import BadgeSun from "../../assets/icons/BadgeSun.png";
 
 import HudIcon from "../../assets/icons/HudIcon.png";
+import KnogleIcon from "../../assets/icons/KnogleIcon.png";
+import VinterIcon from "../../assets/icons/VinterIcon.png";
+import MuskelIcon from "../../assets/icons/MuskelIcon.png";
 
 
 let showVitamins = ref(true);
 let ChildVitamins = ref([
-    {type:"D", badges:[BadgeSun,BadgeBone],img: DVit,fullName:true,effects:["skin","bones"], color:"#FC9494", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"C", badges:[BadgeShield,BadgeEnergy],img: DVit,fullName:true,effects:["",""], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"Calcium", badges:[BadgeBone,BadgeHeart],img: DVit,fullName:false,effects:["",""], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"Magnesium", badges:[BadgeStrength,BadgeSleep],img: DVit,fullName:false,effects:["",""],color:"##E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"Jern", badges:[BadgeBlood,BadgeEnergy],img: DVit,fullName:false,effects:["",""], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"Multi", badges:[BadgeHappy,BadgeMulti],img: DVit,fullName:true,effects:["",""], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"}
+    {type:"D", badges:[BadgeSun,BadgeBone],img: DVit,fullName:true,effects:["skin","bones","winter","muscle"], color:"#FC9494", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"C", badges:[BadgeShield,BadgeEnergy],img: DVit,fullName:true,effects:["skin"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Calcium", badges:[BadgeBone,BadgeHeart],img: DVit,fullName:false,effects:["winter"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Magnesium", badges:[BadgeStrength,BadgeSleep],img: DVit,fullName:false,effects:["muscle"],color:"##E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Jern", badges:[BadgeBlood,BadgeEnergy],img: DVit,fullName:false,effects:["bones"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"Multi", badges:[BadgeHappy,BadgeMulti],img: DVit,fullName:true,effects:[], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"}
 
 ]);
 const effectList = {
     skin: {title:"Sund hud",text:"Bidrager til blød, stærk og modstandsdygtig hud.", img: HudIcon},
-    bones: {title:"Knogler og tænder",text:"", img: HudIcon}
+    winter: {title:"Vækst & Udvikling",text:"Ekstra vigtigt om vinteren, når der er mindre sollys, som naturligt danner D-vitamin i kroppen.", img: VinterIcon},
+    muscle: {title:"Muskelfunktion",text:"Essentielt for normal vækst og udvikling af celler og væv.", img: MuskelIcon},
+    bones: {title:"Knogler og tænder",text:"Hjælper kroppen med at optage kalk og opbygge sunde knogler og tænder.", img: KnogleIcon}
+
 };
 let selectedVitamin = ref(ChildVitamins.value[0]);
 
@@ -156,9 +162,12 @@ const effect4 = useTemplateRef('fourth');
         </div>
         <div class="effectArea">
             <div v-for="(effect,index) in selectedVitamin.effects" class="effectContainer">
-                <div v-if="effect">
+                <div v-if="effect" class="effectBox">
                     <img :src=effectList[effect].img alt="">
-                    <p>{{ effectList[effect].text }}</p>
+                    <div class="effectDesc">
+                        <h3>{{ effectList[effect].title }}</h3>
+                        <p>{{ effectList[effect].text }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -410,6 +419,7 @@ justify-content:center;
 }
 .effectArea{
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     padding: 0 10%;
 }
@@ -417,16 +427,19 @@ justify-content:center;
     width: 50%;
 
 }
-.effectContainer div{
+.effectBox{
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
-.effectContainer div p{
- width: 70%;
- padding: 10px;
+.effectDesc{
+    
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    padding: 10px;
 }
 .effectContainer div img{
     width: 20%;

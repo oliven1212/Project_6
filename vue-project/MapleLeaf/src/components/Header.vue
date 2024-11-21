@@ -20,7 +20,6 @@
                 <img src="../assets//icons/UserIcon.png" alt="">
                 <h3>Log ind</h3>
             </a>
-
         </div>
 
 
