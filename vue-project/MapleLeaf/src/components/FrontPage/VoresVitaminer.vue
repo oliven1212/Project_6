@@ -11,7 +11,7 @@
                 <p class="text">90 tabletter</p>
                 <p>A-vitamin bidrager til at vedligeholde normalt syn og normal hud</p>
             </div>
-            <a href=""><p>Læs mere</p></a>
+            <a href="./Vitamins"><p>Læs mere</p></a>
         </div>
         <div class="Item">
             <div style="background-color: #D6EEFF;">
@@ -20,7 +20,7 @@
                 <p class="text">90 tabletter</p>
                 <p>Med bl. a. biotin, der vedligeholder normal hud og normalt hår</p>
             </div>
-            <a href=""><p>Læs mere</p></a>
+            <a href="./Vitamins"><p>Læs mere</p></a>
         </div>
         <div class="Item">
             <div style="background-color: #FFF2D6;">
@@ -29,7 +29,7 @@
                 <p class="text">90 tabletter</p>
                 <p>Til dig der tænker på dit immunforsvar</p>
             </div>
-            <a href=""><p>Læs mere</p></a>
+            <a href="./Vitamins"><p>Læs mere</p></a>
         </div>
     </div>
 </template>
@@ -51,6 +51,7 @@ h1{
     display: flex;
     flex-direction: column;
     margin:2px;
+    width: 100%;
 }
 .Item div{
     flex: 1;
@@ -59,7 +60,8 @@ h1{
     padding: 20px;
 }
 .Item img{
-width: 100%;
+    align-self: center;
+    width: 50%;
 }
 .Item p{
     margin: auto;

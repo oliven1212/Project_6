@@ -4,7 +4,8 @@ import AboutView from '../views/AboutView.vue';
 import LogInView from '../views/LogInView.vue';
 import ModQuizView from '../views/ModQuizView.vue';
 import QuizView from '../views/QuizView.vue';
-import ChildVitaminView from '@/views/ChildVitaminView.vue';
+import ChildVitaminView from '../views/ChildVitaminView.vue';
+import VitaminView from '../views/VitaminView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/Quiz',
       name: 'Quiz',
       component: QuizView
+    },
+    {
+      path: '/Vitamins',
+      name: 'Vitamins',
+      component: VitaminView
     },
     {
       path: '/ChildVitamins',

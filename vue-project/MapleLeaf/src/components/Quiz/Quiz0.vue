@@ -82,7 +82,6 @@ const update = () => {
     currentData.value = { type: null, answers: [] }; // fallback hvis spørgsmål ikke findes
   }
 };
-
 // Call async functions after mounting to avoid returning promises in `setup`
 onMounted(() => {
   initializeFirebase();
@@ -247,7 +246,7 @@ let nextQuestion = () => {
         <button v-if="currentQuestion > 0" v-on:click="previousQuestion()" class="buttons"><img src="../../assets/icons/ArrowIcon.png" alt="" style="transform: scaleX(-1); margin-left: 0px;"><p>Forrige</p></button>
         <button v-if="currentQuestion >= quizQuestion.length-1" v-on:click="generateRecommendations()" class="buttons"><p>Vis Anbefalinger</p></button>
         <button v-if="currentQuestion > 0" v-on:click="nextQuestion()"class="buttons"><p>Næste</p> <img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
-        <button v-else v-on:click="nextQuestion()"class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
+        <button v-else  v-on:click="nextQuestion()"class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
       </div>
       <div class="progressBar">
         <div  v-for="(,index) in quizQuestion">

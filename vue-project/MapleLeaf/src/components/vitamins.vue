@@ -1,34 +1,41 @@
 <script setup>
-import {useTemplateRef, ref} from "vue";
-import DVit from "../../assets/Vitamins/ChildVitamins/DVitamin.png";
-import CVit from "../../assets/Vitamins/ChildVitamins/CVitamin.png";
-import CalciumVit from "../../assets/Vitamins/ChildVitamins/CalciumVitamin.png";
-import MagnesiumVit from "../../assets/Vitamins/ChildVitamins/MagnesiumVitamin.png";
-import JernVit from "../../assets/Vitamins/ChildVitamins/JernVitamin.png";
-import MultiVit from "../../assets/Vitamins/ChildVitamins/MultiVitamin.png";
+import { ref } from "vue";
+import DVit from "../assets/Vitamins/ChildVitamins/DVitamin.png";
+import CalciumVit from "../assets/Vitamins/ChildVitamins/CalciumVitamin.png";
+import MagnesiumVit from "../assets/Vitamins/ChildVitamins/MagnesiumVitamin.png";
+import JernVit from "../assets/Vitamins/ChildVitamins/JernVitamin.png";
+import MultiVit from "../assets/Vitamins/ChildVitamins/MultiVitamin.png";
+import AVitamin from "../assets/Vitamins/AVitamin.png";
+import BVitamin from "../assets/Vitamins/BVitamin.png";
+import CVitamin from "../assets/Vitamins/CVitamin.png";
 
-import BadgeBlood from "../../assets/icons/BadgeBlood.png";
-import BadgeBone from "../../assets/icons/BadgeBone.png";
-import BadgeEnergy from "../../assets/icons/BadgeEnergy.png";
-import BadgeHappy from "../../assets/icons/BadgeHappy.png";
-import BadgeHeart from "../../assets/icons/BadgeHeart.png";
-import BadgeMulti from "../../assets/icons/BadgeMulti.png";
-import BadgeShield from "../../assets/icons/BadgeShield.png";
-import BadgeSleep from "../../assets/icons/BadgeSleep.png";
-import BadgeStrength from "../../assets/icons/BadgeStrength.png";
-import BadgeSun from "../../assets/icons/BadgeSun.png";
 
-import HudIcon from "../../assets/icons/HudIcon.png";
-import KnogleIcon from "../../assets/icons/KnogleIcon.png";
-import VinterIcon from "../../assets/icons/VinterIcon.png";
-import MuskelIcon from "../../assets/icons/MuskelIcon.png";
+import BadgeBlood from "../assets/icons/BadgeBlood.png";
+import BadgeBone from "../assets/icons/BadgeBone.png";
+import BadgeEnergy from "../assets/icons/BadgeEnergy.png";
+import BadgeHappy from "../assets/icons/BadgeHappy.png";
+import BadgeHeart from "../assets/icons/BadgeHeart.png";
+import BadgeMulti from "../assets/icons/BadgeMulti.png";
+import BadgeShield from "../assets/icons/BadgeShield.png";
+import BadgeSleep from "../assets/icons/BadgeSleep.png";
+import BadgeStrength from "../assets/icons/BadgeStrength.png";
+import BadgeSun from "../assets/icons/BadgeSun.png";
+
+import HudIcon from "../assets/icons/HudIcon.png";
+import KnogleIcon from "../assets/icons/KnogleIcon.png";
+import VinterIcon from "../assets/icons/VinterIcon.png";
+import MuskelIcon from "../assets/icons/MuskelIcon.png";
+import EyeIcon from "../assets/icons/EyeIcon.png";
+import ShieldIcon from "../assets/icons/ShieldIcon.png";
+import GrowthIcon from "../assets/icons/GrowthIcon.png";
+
 
 
 let showVitamins = ref(true);
 let ChildVitamins = ref([
-    {type:"D", badges:[BadgeSun,BadgeBone],img: DVit,fullName:true,effects:["skin","bones","winter","muscle"], color:"#FC9494", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"C", badges:[BadgeShield,BadgeEnergy],img: DVit,fullName:true,effects:["skin"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
-    {type:"Calcium", badges:[BadgeBone,BadgeHeart],img: DVit,fullName:false,effects:["winter"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"A", badges:[BadgeSun,BadgeBone],img: AVitamin,fullName:true,effects:["eye","skin","resistance","growth"], color:"#FC9494", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"B", badges:[BadgeShield,BadgeEnergy],img: BVitamin,fullName:true,effects:["skin"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
+    {type:"C", badges:[BadgeBone,BadgeHeart],img: CVitamin,fullName:true,effects:["winter"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
     {type:"Magnesium", badges:[BadgeStrength,BadgeSleep],img: DVit,fullName:false,effects:["muscle"],color:"##E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
     {type:"Jern", badges:[BadgeBlood,BadgeEnergy],img: DVit,fullName:false,effects:["bones"], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"},
     {type:"Multi", badges:[BadgeHappy,BadgeMulti],img: DVit,fullName:true,effects:[], color:"#E6FFD6", desc:"A-vitamin bidrager til at vedligeholde normalt syn og normal hud"}
@@ -38,6 +45,9 @@ const effectList = {
     skin: {title:"Sund hud",text:"Bidrager til blød, stærk og modstandsdygtig hud.", img: HudIcon},
     winter: {title:"Vækst & Udvikling",text:"Ekstra vigtigt om vinteren, når der er mindre sollys, som naturligt danner D-vitamin i kroppen.", img: VinterIcon},
     muscle: {title:"Muskelfunktion",text:"Essentielt for normal vækst og udvikling af celler og væv.", img: MuskelIcon},
+    eye: {title:"Skarpt syn",text:"Understøtter et sundt syn og hjælper med at se i svagt lys.", img: ShieldIcon},
+    resistance: {title:"Styrket immunforsvar",text:"Hjælper kroppen med at bekæmpe infektioner og sygdomme.", img: EyeIcon},
+    growth: {title:"Vækst og udvikling",text:"Essentielt for normal vækst og udvikling af celler og væv.", img: GrowthIcon},
     bones: {title:"Knogler og tænder",text:"Hjælper kroppen med at optage kalk og opbygge sunde knogler og tænder.", img: KnogleIcon}
 
 };
@@ -46,31 +56,44 @@ let selectedVitamin = ref(ChildVitamins.value[0]);
 let updateVitamin = (index) =>{
     selectedVitamin.value = ChildVitamins.value[index];
     showVitamins.value = false;
-    window.scrollTo(0,0);
-
+    scroll(0);
 }
-const effect1 = useTemplateRef('first');
-const effect2 = useTemplateRef('second');
-const effect3 = useTemplateRef('theird');
-const effect4 = useTemplateRef('fourth');
 
+const scroll = (id) =>{
+    if(typeof(id) == "string"){
+        document.getElementById(id).scrollIntoView({behavior: "smooth"});
+    }else if(typeof(id) == "number"){
+        window.scrollTo({top:id,behavior:"smooth"});
+    }
+}
+
+const showDrop = (id) =>{
+    if(document.getElementById(id).style.display == "none"){
+        document.getElementById(id).style.display = "block";
+    }else{
+        document.getElementById(id).style.display = "none";
+    }
+}
 
 </script>
 
 
 <template>
+    <button v-on:click="scroll(0)" id="toTop">
+        <img src="../assets/icons/ArrowDownIcon.png" alt="">
+    </button>
     <div class="general" v-if="showVitamins">
         <div class="generalInformation">
             <div>
-                <h1>Børnevitaminer</h1>
-                <p>Det kan være en udfordring for børn at få tilstrækkeligt med vitaminer og mineraler gennem deres kost.
+                <h1>Vitaminer</h1>
+                <p>Det kan være en udfordring for voksne at få tilstrækkeligt med vitaminer og mineraler gennem deres kost.
                     <br><br>
-                    Børnevitaminer kan derfor være en nyttig løsning for at sikre, at dit barn får de essentielle næringsstoffer til vækst og udvikling. 
+                    Vitaminer kan derfor være en nyttig løsning for at sikre, at dit barn får de essentielle næringsstoffer. 
                     <br><br>
-                    Opdag vores børnevitaminer, der støtter dit barns sundhed og velvære.
+                    Opdag vores Vitaminer, der støtter din sundhed og velvære.
                 </p>
             </div>
-            <img src="../../assets/RotatedPills.png" alt="">
+            <img src="../assets/RotatedPills.png" alt="">
         </div>
         <div class="vitamins">
             <div class="vitamin" v-for="(vitamin,index) in ChildVitamins">
@@ -84,9 +107,8 @@ const effect4 = useTemplateRef('fourth');
                 <button v-on:click="updateVitamin(index)"><p>Læs mere</p></button>
             </div>
         </div>
-        <img src="../../assets/ChildCornerSquares.png" alt="" style="width: 100%;">
+        <img src="../assets/ChildCornerSquares.png" alt="" style="width: 100%;">
     </div>
-
 
     <div class="showVitamin" v-if="!showVitamins" :style="{background: 'linear-gradient('+selectedVitamin.color+' -20%, #ffffff 50%, '+selectedVitamin.color+' 120%)'}">
         <div class="information">
@@ -97,30 +119,33 @@ const effect4 = useTemplateRef('fourth');
                 <p>{{ selectedVitamin.desc }}</p>
                 <div class="drop">
                     <div class="dropdowns">
-                        <button class="dropdown"><p>Anbefales til</p><img class="arrow"src="../../assets/icons/ArrowDownIcon.png" alt=""></button><br>
-                        <button class="dropdown"><p>Dosesring</p><img class="arrow"src="../../assets/icons/ArrowDownIcon.png" alt=""></button>
+                        <button v-on:click="showDrop('suggestions')" class="dropdown"><p>Anbefales til</p><img class="arrow"src="../assets/icons/ArrowDownIcon.png" alt=""></button>
+                        <div id="suggestions" class="dropField"><p v-for="effect in selectedVitamin.effects">{{ effect }}</p></div>
+
+                        <button v-on:click="showDrop('doseSize')" class="dropdown"><p>Dosesring</p><img class="arrow"src="../assets/icons/ArrowDownIcon.png" alt=""></button>
+                        <div id="doseSize" class="dropField"><p>Tag en pille om dagen </p></div>
                     </div>
-                    <img class="Nr1" src="../../assets/icons/Nr1Icon.png" alt="">
+                    <img class="Nr1" src="../assets/icons/Nr1Icon.png" alt="">
                 </div>
                 <div class="findAt">
                     <p>Vores produkter kan købes online hos</p>
                     <div>
-                        <a href="https://apopro.dk/"><img src="../../assets/ApoProDK.png" alt="ApoPro.dk"></a>
-                        <a href="https://www.webapoteket.dk/"><img src="../../assets/WebApoteketDK.png" alt=""></a>
-                        <a href="https://www.dinapoteker.dk/"><img src="../../assets/dinApoteker.png" alt=""></a>
-                        <a href="https://www.apotekeren.dk/"><img src="../../assets/ApotekerenDK.png" alt=""></a>
-                        <a href="https://apoteket-online.dk/"><img src="../../assets/ApoteketOnlineDK.png" alt=""></a>
+                        <a href="https://apopro.dk/"><img src="../assets/ApoProDK.png" alt=""></a>
+                        <a href="https://www.webapoteket.dk/"><img src="../assets/WebApoteketDK.png" alt=""></a>
+                        <a href="https://www.dinapoteker.dk/"><img src="../assets/dinApoteker.png" alt=""></a>
+                        <a href="https://www.apotekeren.dk/"><img src="../assets/ApotekerenDK.png" alt=""></a>
+                        <a href="https://apoteket-online.dk/"><img src="../assets/ApoteketOnlineDK.png" alt=""></a>
                     </div>
                 </div>
             </div>
-            <img class="informationImg" src="../../assets/MomAndChild.png" alt="">
+            <img class="informationImg" :src="selectedVitamin.img" alt="">
         </div>
         <div class="infograph">
             <div class="danceFloor">
                 <img :src="selectedVitamin.img" alt="">
             </div>
             <div class="buttonArea1">
-                <button v-if="selectedVitamin.effects[0]" style="text-align: end"><h2>{{ effectList[selectedVitamin.effects[0]].title }}</h2></button>
+                <button v-if="selectedVitamin.effects[0]" v-on:click="scroll('EffectArea')" style="text-align: end"><h2>{{ effectList[selectedVitamin.effects[0]].title }}</h2></button>
                 <button v-else style="text-align: end"><h2>{{ "" }}</h2></button>
                 <div>
                     <svg class="buttonAreaSvg">
@@ -130,7 +155,7 @@ const effect4 = useTemplateRef('fourth');
                 </div>
             </div>
             <div class="buttonArea2">
-                <button v-if="selectedVitamin.effects[1]" style="margin-left: 30%; text-align: start"><h2>{{ effectList[selectedVitamin.effects[1]].title }}</h2></button>
+                <button v-if="selectedVitamin.effects[1]" v-on:click="scroll('EffectArea')" style="margin-left: 30%; text-align: start"><h2>{{ effectList[selectedVitamin.effects[1]].title }}</h2></button>
                 <button v-else style="margin-left: 30%; text-align: start"><h2>{{ "" }}</h2></button>
                 <div>
                     <svg class="buttonAreaSvg">
@@ -140,7 +165,7 @@ const effect4 = useTemplateRef('fourth');
                 </div>
             </div>
             <div class="buttonArea3">
-                <button v-if="selectedVitamin.effects[2]" style="text-align: end;"><h2>{{ effectList[selectedVitamin.effects[2]].title}}</h2></button>
+                <button v-if="selectedVitamin.effects[2]" v-on:click="scroll('EffectArea')" style="text-align: end;"><h2>{{ effectList[selectedVitamin.effects[2]].title}}</h2></button>
                 <button v-else style="text-align: end;"><h2>{{ "" }}</h2></button>
                 <div>
                     <svg class="buttonAreaSvg">
@@ -150,7 +175,7 @@ const effect4 = useTemplateRef('fourth');
                 </div>
             </div>
             <div class="buttonArea4">
-                <button v-if="selectedVitamin.effects[3]" style="margin-left: 30%; text-align: start;"><h2>{{ effectList[selectedVitamin.effects[3]].title}}</h2></button>
+                <button v-if="selectedVitamin.effects[3]" v-on:click="scroll('EffectArea')" style="margin-left: 30%; text-align: start;"><h2>{{ effectList[selectedVitamin.effects[3]].title}}</h2></button>
                 <button v-else style="margin-left: 30%; text-align: start;"><h2>{{ "" }}</h2></button>
                 <div>
                     <svg class="buttonAreaSvg">
@@ -160,7 +185,7 @@ const effect4 = useTemplateRef('fourth');
                 </div>
             </div>
         </div>
-        <div class="effectArea">
+        <div class="effectArea" id="EffectArea">
             <div v-for="(effect,index) in selectedVitamin.effects" class="effectContainer">
                 <div v-if="effect" class="effectBox">
                     <img :src=effectList[effect].img alt="">
@@ -177,6 +202,28 @@ const effect4 = useTemplateRef('fourth');
 
 
 <style scoped>
+#toTop{
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    background-color: #FFAC00;
+    border: none;
+    border-radius: 30px;
+    bottom: 15px;
+    left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#toTop img{
+    width: 70%;
+    height: 50%;
+    transform: scaleY(-1);
+}
+#toTop:hover{
+    background-color: #ad7400;
+}
+
 button:hover{
     cursor:pointer;
 }
@@ -188,7 +235,7 @@ button:hover{
     flex-direction: row;
     align-items: center;
     width: 100%;
-    background-image: url("../../assets/BackgroundForest.png");
+    background-image: url("../assets/BackgroundForest.png");
 }
 .generalInformation div{
     display: block;
@@ -238,11 +285,11 @@ button:hover{
 
 }
 .informationImg{
-    width: 30%;
+    height: 50vh;
     object-fit: contain;
-    margin-top: 0;
     align-self: baseline;
-    margin-left: 20px;
+    margin: auto;
+    margin-top: 5vh;
 }
 .arrow{
     width: 30px;
@@ -273,12 +320,23 @@ button:hover{
     border: none;
     padding: 5px 15px;
     color: white;
+    margin-top: 30px;
+
 }
+
 .dropdowns{
+
     width: 40%;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
-.dropdown:hover,.return{
+.dropField{
+    display: none;
+    background-color: #f7f7f7;
+    padding: 10px;
+    padding-top: 5px;
+}
+.dropdown:hover,.return:hover{
     background-color: #ad7400;
 }
 .return{

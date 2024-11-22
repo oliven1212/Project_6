@@ -12,7 +12,7 @@
                 <img src="../assets/icons/QuizIcon.png" alt="">
                 <h3>Vitamin Guiden</h3>
             </a>
-            <a href="./childvitamins">
+            <a href="./Vitamins">
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Vitaminer</h3>
             </a>
