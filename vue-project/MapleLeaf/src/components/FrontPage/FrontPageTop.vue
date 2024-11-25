@@ -8,7 +8,8 @@
     <img src="../../assets/bannerOverlay.png" alt="">
     <div>
       <h1>Maple Leaf</h1>
-      <p>Din vej til et sundere liv med naturlige vitaminer og kosttilskud, skræddersyet til dine behov.</p>
+      <p>Prøv vores Vitamin guide. Din vej til et sundere liv med naturlige vitaminer og kosttilskud, 
+        skræddersyet til dine behov.</p>
       <a href="/quiz">Prøv vitamin guiden</a>
     </div>
   </div>
@@ -63,5 +64,7 @@
     background-color: #FFAC00;
     text-decoration: none;
     color: white;
+    width: 80%;
+    text-align: center;
   }
 </style>
