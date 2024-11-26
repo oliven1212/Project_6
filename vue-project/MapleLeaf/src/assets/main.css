@@ -4,7 +4,7 @@
 width: 100%;
 display: block;
 }
-h1,h2,h3,p,a,label{
+h1,h2,h3,p,a,label,pre{
     font-family: 'Avenir', sans-serif;
 }
 h1{
@@ -16,7 +16,7 @@ h2{
 h3,a{
     font-size: 30px;
 }
-p{
+p,pre{
     font-size: 20px;
 }
 label{

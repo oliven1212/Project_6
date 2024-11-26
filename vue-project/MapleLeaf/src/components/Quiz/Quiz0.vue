@@ -46,14 +46,13 @@ const initializeFirebase = async () => {
     //sætter functionen hvilken model af vertexAI med parameter Ai og hvilken udgaver den tager ind som parameter.
     //systeminstruktioner er indbygget funktion til at prombt hvilken character den skal spille.
     model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash", systemInstruction: `Du er en specialiseret sundhedsassistent, der fokuserer på opdateret og evidensbaseret information om vitaminer og kosttilskud.
-Dit mål er at levere en liste med maksimalt tre vitaminer eller kosttilskud, udvalgt på baggrund af deres relevans og dokumenterede sundhedsmæssige fordele.
-Brug kun data fra pålidelige og opdaterede kilder indsamlet efter [sæt dato, f.eks. 2022], såsom sundhedsmyndigheder, forskningsstudier eller kliniske retningslinjer, især fra europæiske og amerikanske sundhedsorganisationer.
+Dit mål er at levere en liste med maksimalt tre vitaminer, udvalgt på baggrund af deres relevans og dokumenterede sundhedsmæssige fordele.
+Brug kun data fra pålidelige og opdaterede kilder, såsom sundhedsmyndigheder, forskningsstudier eller kliniske retningslinjer, især fra europæiske og amerikanske sundhedsorganisationer.
 
 For hver anbefaling skal du inkludere:
 
     Beskrivelse og primære sundhedsmæssige fordele - En kort forklaring af, hvad tilskuddet gør, og dets mest væsentlige fordele.
-    Anbefalet daglig dosis - Specifikke dosisanbefalinger for voksne og børn (hvis relevant).
-    Mulige bivirkninger eller advarsler - Kendte risici og forholdsregler, især for sårbare grupper.` });
+    Skriv ikke kilden til vitaminen og bivirkninger, derudover skriv ikke nogle segmenter om at det er en god ide at snakke med sin læge om det` });
     console.log("Firebase initialized successfully.");
   } catch (error) {
     console.error("Error fetching Firebase config or initializing Firebase:", error);
@@ -168,7 +167,8 @@ const generateRecommendations = async () => {
           const response = result.response;
 //bruges til at oprett en reaktiv reference response indeholder en text metode som retunerer texten fra svaret
           responseText = ref(response.text());  
-          console.log(responseText);
+          responseText.value = responseText.value.replaceAll('*','');
+          console.log(responseText.value);
           update();
             // recommendations.value.push(responseText);
         } catch (error) {
@@ -257,8 +257,10 @@ let nextQuestion = () => {
     </div>
     
   </div> 
-  <div v-if="responseText">
-    <pre>{{ responseText}}</pre >
+  <div v-if="responseText" class="responseBox">
+    <h2>Dette svar er generet med AI og skal ikke følges uden konsulation med en ekspert</h2>
+    <pre>{{ responseText }}</pre>
+    <a href="./vitamins"><p>Læs mere her</p></a>
   </div>
            
 </template>
@@ -374,6 +376,28 @@ select{
 } 
 .Cross img {
   width: 100%;
+}
+.responseBox{
+  display: block;
+}
+.responseBox h2{
+  background-color: #ff00005b;
+  text-align: center;
+}
+.responseBox a{
+  display: block;
+  background-color: #FFAC00;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 20px auto;
+  width: 300px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+}
+.responseBox pre{
+  white-space: pre-wrap;
+  margin: 20px 80px;
 }
 
 </style>
