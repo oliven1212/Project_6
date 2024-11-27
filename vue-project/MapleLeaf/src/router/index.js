@@ -8,6 +8,8 @@ import ChildVitaminView from '../views/ChildVitaminView.vue';
 import VitaminView from '../views/VitaminView.vue';
 import Advertisement from '../views/Reklame.vue';
 import CompanyVideo from '../views/FirmaVideo.vue';
+import ContentView from '../views/ContentView.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +58,11 @@ const router = createRouter({
       path: '/FirmaVideo',
       name: 'FirmaVideo',
       component: CompanyVideo
+    },
+    {
+      path: '/Content',
+      name: 'ContentProducts',
+      component: ContentView
     }
   ]
 })

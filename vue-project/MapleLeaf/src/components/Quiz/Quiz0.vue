@@ -158,9 +158,9 @@ const generateRecommendations = async () => {
     
     // Clear previous recommendations to avoid duplicates
     // recommendations.value = [];
-    
     {
         try {
+          setTimeout(()=> { alert('Dine resultater er igang med at blive genereret'); }, 1);
           //variabel som indeholder AI i model med metoden og og indeholder værdierne string prompt
           const result = await model.generateContent(prompt);
           console.log(prompt);
