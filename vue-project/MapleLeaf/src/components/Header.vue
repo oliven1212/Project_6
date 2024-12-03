@@ -52,7 +52,7 @@
         flex-direction: row;
         margin: 20px 0px;
         margin-left: auto;
-        width: 45%;
+        width: 55%;
     }
     #headerItems a{
         display: flex;
