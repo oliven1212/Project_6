@@ -12,6 +12,10 @@
                 <img src="../assets/icons/QuizIcon.png" alt="">
                 <h3>Vitamin Guiden</h3>
             </a>
+            <a href="./adminQuiz">
+                <img src="../assets/icons/PillIcon.png" alt="">
+                <h3>Rediger guiden</h3>
+            </a>
             <a href="./Vitamins">
                 <img src="../assets/icons/PillIcon.png" alt="">
                 <h3>Vitaminer</h3>
