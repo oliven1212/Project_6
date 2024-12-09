@@ -193,6 +193,13 @@ let nextQuestion = () => {
     }
 };
 
+//Fremvisning af forbedring Jeppe
+let navigationTo = (location) => {
+  currentQuestion.value = location;
+  update();
+
+}
+
 </script>
 
 <template>
@@ -250,8 +257,9 @@ let nextQuestion = () => {
       </div>
       <div class="progressBar">
         <div  v-for="(,index) in quizQuestion">
-          <span class="dot" v-if="currentQuestion<index"></span>
-          <span class="dotFill" v-else ></span>
+          <button v-on:click="navigationTo(index)" class="dot" v-if="currentQuestion<index"></button>
+          <button v-on:click="navigationTo(index)" class="dotFill" v-else ></button>
+
         </div>
       </div>
     </div>
@@ -303,6 +311,13 @@ let nextQuestion = () => {
 .dotFill{
   background-color: #FFAC00;
 }
+.dot:hover {
+background-color: lightgrey;
+}
+.dotFill:hover {
+  background-color: #bc7f06;
+}
+
 .QuizBox{
   display: flex;
   flex-direction: column;
