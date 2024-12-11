@@ -195,6 +195,7 @@ let nextQuestion = () => {
 };
 
 //Fremvisning af forbedring Jeppe
+//lokation = prikkens tal værdi
 let navigationTo = (location) => {
   currentQuestion.value = location;
   update();
@@ -300,7 +301,9 @@ const progressRate = async (question) =>{
         <button v-if="currentQuestion > 0" v-on:click="nextQuestion()"class="buttons"><p>Næste</p> <img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
         <button v-else  v-on:click="nextQuestion()" class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
       </div>
+      
       <div class="progressBar">
+        <!-- index = positation i arrayet fra quizQuestion -->
         <div  v-for="(,index) in quizQuestion">
           <button v-on:click="navigationTo(index)" class="dot" v-if="currentQuestion<index"></button>
           <button v-on:click="navigationTo(index)" class="dotFill" v-else ></button>
