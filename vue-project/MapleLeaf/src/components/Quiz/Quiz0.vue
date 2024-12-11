@@ -191,6 +191,7 @@ let nextQuestion = () => {
         currentQuestion.value += 1;
         update();
     }
+    progressRate(currentQuestion.value-1);
 };
 
 //Fremvisning af forbedring Jeppe
@@ -198,6 +199,50 @@ let navigationTo = (location) => {
   currentQuestion.value = location;
   update();
 
+}
+let feedbackComment = () =>{
+  if(document.getElementById("commentBox").value.length == 0){
+    alert("Udfyld tekst feltet for at sende din feedback, tak");
+    return;
+  }
+    fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/reviews.json", {
+        method: "Post", 
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"suggestion":document.getElementById("commentBox").value}),
+    })
+        .catch((error) => {
+            console.error("Fejl ved uploading af feedback", error);
+    });
+}
+
+const progressRate = async (question) =>{
+  await fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/progressRate.json", {
+          method: "GET"})
+          .then((response)=>{
+            return response.json();
+          })
+          .then((result)=>{
+            if(isNaN(result[`Question${question}Answers`])){
+              result[`Question${question}Answers`] = 1;
+            }else{
+              result[`Question${question}Answers`]++;
+            }
+            fetch("https://projekt6-ebfa8-default-rtdb.europe-west1.firebasedatabase.app/progressRate.json", {
+              method: "PUT", 
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(result),
+              })
+              .catch((error) => {
+                  console.error("Fejl ved uploading af data", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Fejl ved modtagelse af data", error);
+          });
 }
 
 </script>
@@ -253,7 +298,7 @@ let navigationTo = (location) => {
         <button v-if="currentQuestion > 0" v-on:click="previousQuestion()" class="buttons"><img src="../../assets/icons/ArrowIcon.png" alt="" style="transform: scaleX(-1); margin-left: 0px;"><p>Forrige</p></button>
         <button v-if="currentQuestion >= quizQuestion.length-1" v-on:click="generateRecommendations()" class="buttons"><p>Vis Anbefalinger</p></button>
         <button v-if="currentQuestion > 0" v-on:click="nextQuestion()"class="buttons"><p>Næste</p> <img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
-        <button v-else  v-on:click="nextQuestion()"class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
+        <button v-else  v-on:click="nextQuestion()" class="buttons" style="margin-left: auto"><p>Næste</p><img src="../../assets/icons/ArrowIcon.png" alt="" style="margin-right: 0px;"></button>
       </div>
       <div class="progressBar">
         <div  v-for="(,index) in quizQuestion">
@@ -268,6 +313,11 @@ let navigationTo = (location) => {
   <div v-if="responseText" class="responseBox">
     <h2>Dette svar er generet med AI og skal ikke følges uden konsulation med en ekspert</h2>
     <pre>{{ responseText }}</pre>
+    <div>
+      <label for="commentBox">Hvad kunne forbedres?</label>
+      <textarea id="commentBox" type="text"></textarea>
+      <button v-on:click="feedbackComment()"><p>Send</p></button>
+    </div>
     <a href="./vitamins"><p>Læs mere her</p></a>
   </div>
            
@@ -405,7 +455,7 @@ select{
   padding: 10px;
   border-radius: 20px;
   margin: 20px auto;
-  width: 300px;
+  width: 250px;
   text-align: center;
   color: white;
   text-decoration: none;
@@ -414,5 +464,37 @@ select{
   white-space: pre-wrap;
   margin: 20px 80px;
 }
-
+.responseBox div{
+  width: 500px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+}
+.responseBox div button{
+  display: block;
+  width: 250px;
+  margin: 10px auto;
+  background-color: #FFAC00;
+  padding: 10px;
+  border-style: none;
+  border-radius: 20px;
+}
+.responseBox div button p{
+  color: white;
+}
+.responseBox div label{
+  display: block;
+  margin: 10px auto;
+  width: auto;
+  }
+.responseBox div textarea{
+  display: block;
+  min-height: 200px;
+  
+}
+.responseBox div button:hover, .responseBox a:hover{
+  background-color: #ac7300;
+  cursor: pointer ;
+}
 </style>
