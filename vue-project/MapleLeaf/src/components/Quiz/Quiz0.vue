@@ -195,7 +195,8 @@ let nextQuestion = () => {
 };
 
 //Fremvisning af forbedring Jeppe
-//lokation = prikkens tal værdi
+//location = prikkens tal værdi
+//currentQuestion.value = nuværende spørgsmål
 let navigationTo = (location) => {
   currentQuestion.value = location;
   update();
@@ -303,11 +304,12 @@ const progressRate = async (question) =>{
       </div>
       
       <div class="progressBar">
-        <!-- index = positation i arrayet fra quizQuestion -->
-        <div  v-for="(,index) in quizQuestion">
+        <!-- index = location i javascript functionen -->
+        <!-- komma før index er nødvendig for at det bliver sat til indexet vi er på -->
+        <!-- v-for = loop -->
+        <div  v-for="(,index) in quizQuestion"> 
           <button v-on:click="navigationTo(index)" class="dot" v-if="currentQuestion<index"></button>
           <button v-on:click="navigationTo(index)" class="dotFill" v-else ></button>
-
         </div>
       </div>
     </div>
